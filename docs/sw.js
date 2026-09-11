@@ -10,7 +10,7 @@
  * - すべてのURLは sw.js 自身からの相対パス（サブパス配信 = 相対パス解決に対応するため）。
  */
 
-const VERSION = 'v20260912-0057';
+const VERSION = 'v20260912-0845';
 const CACHE_PREFIX = 'psr-';
 const CACHE_NAME = CACHE_PREFIX + VERSION;
 
@@ -32,6 +32,7 @@ const PRECACHE_URLS = [
   './js/ui.js',
   './js/settings.js',
   './js/io.js',
+  './js/share-card.js',
   './js/data/gamedata.js',
   './js/data/species.js',
   './js/data/ingredients.js',

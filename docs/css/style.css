@@ -213,7 +213,8 @@ button, input, select, textarea { font: inherit; }
   cursor: not-allowed;
 }
 
-.btn-row {
+.btn-row,
+.action-row {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;

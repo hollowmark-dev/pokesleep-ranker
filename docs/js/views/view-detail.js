@@ -9,6 +9,7 @@ import {
   ingredientScore, ingredientPoints, ingredientCombos,
 } from '../score/score.js';
 import { getDistribution } from '../score/dist.js';
+import { shareResultCard } from '../share-card.js';
 import { SPECIALTIES, SUBSKILLS, NATURES, STATS, MAIN_SKILLS, SUBSKILL_UNLOCK_LEVELS, byId } from '../data/gamedata.js';
 import { INGREDIENT_UNLOCK_LEVELS } from '../data/ingredients.js';
 
@@ -68,7 +69,7 @@ export async function render(container, { id } = {}) {
     breakdownSection(ind, breakdown, score),
     ingredientSection(ind, breakdown, comboRank, settings),
     detailsSection(ind),
-    actionsSection(ind),
+    actionsSection(ind, settings),
     compareSection(ind, allIndividuals, settings)
   );
 }
@@ -455,7 +456,27 @@ function detailsSection(ind) {
   );
 }
 
-function actionsSection(ind) {
+function actionsSection(ind, settings) {
+  // 結果カード（PNG）を作って共有する。端末が共有APIを持たなければダウンロードになる。
+  const shareBtn = el(
+    'button',
+    {
+      class: 'btn btn-primary',
+      type: 'button',
+      onclick: async () => {
+        shareBtn.disabled = true;
+        const label = shareBtn.textContent;
+        shareBtn.textContent = '画像を作成中…';
+        try {
+          await shareResultCard(ind, settings);
+        } finally {
+          shareBtn.textContent = label;
+          shareBtn.disabled = false;
+        }
+      },
+    },
+    '画像で共有'
+  );
   const editBtn = el(
     'button',
     { class: 'btn', type: 'button', onclick: () => navigate('#/edit/' + ind.id) },
@@ -480,7 +501,7 @@ function actionsSection(ind) {
     },
     '削除'
   );
-  return el('div', { class: 'card action-row' }, editBtn, deleteBtn);
+  return el('div', { class: 'card action-row' }, shareBtn, editBtn, deleteBtn);
 }
 
 function compareSection(ind, allIndividuals, settings) {
