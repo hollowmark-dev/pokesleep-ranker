@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- ポケスリ個体評価のアイコン。夜空の下で眠るオリジナルの丸いモンスター（既存キャラは使わない） -->
+  <defs>
+    <linearGradient id="sky" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="512">
+      <stop offset="0" stop-color="#1e3a5f"/>
+      <stop offset="1" stop-color="#3ac26b"/>
+    </linearGradient>
+    <radialGradient id="body" cx="0.4" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#fff6c8"/>
+      <stop offset="1" stop-color="#f5c542"/>
+    </radialGradient>
+    <radialGradient id="moon" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff9d6"/>
+      <stop offset="1" stop-color="#ffe27a"/>
+    </radialGradient>
+    <clipPath id="rounded"><rect x="0" y="0" width="512" height="512" rx="112" ry="112"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#rounded)">
+    <!-- 背景: 夜空から草原の緑へ -->
+    <rect width="512" height="512" fill="url(#sky)"/>
+    <g id="content">
+    <!-- 星 -->
+    <g fill="#ffffff" opacity="0.9">
+      <circle cx="88" cy="72" r="5"/>
+      <circle cx="150" cy="120" r="3"/>
+      <circle cx="240" cy="58" r="4"/>
+      <circle cx="330" cy="104" r="3"/>
+      <circle cx="452" cy="150" r="4"/>
+      <circle cx="60" cy="176" r="3"/>
+      <path d="M118 136 l6 14 14 6 -14 6 -6 14 -6 -14 -14 -6 14 -6z" opacity="0.85"/>
+    </g>
+    <!-- 三日月 -->
+    <circle cx="410" cy="82" r="46" fill="url(#moon)"/>
+    <circle cx="432" cy="66" r="40" fill="url(#sky)"/>
+    <!-- 草原（下の丘） -->
+    <ellipse cx="256" cy="520" rx="380" ry="150" fill="#2fa85b"/>
+    <ellipse cx="256" cy="540" rx="300" ry="120" fill="#46d27c"/>
+
+    <!-- Zzz（頭の上） -->
+    <g fill="#ffffff" font-family="Arial Rounded MT Bold, Arial, Helvetica, sans-serif" font-weight="900">
+      <text x="196" y="206" font-size="40" transform="rotate(-12 196 206)">z</text>
+      <text x="228" y="176" font-size="54" transform="rotate(-12 228 176)">z</text>
+      <text x="270" y="140" font-size="70" transform="rotate(-12 270 140)">Z</text>
+    </g>
+
+    <!-- モンスター本体 -->
+    <g>
+      <!-- 耳 -->
+      <ellipse cx="150" cy="232" rx="40" ry="58" fill="#f5c542" transform="rotate(-22 150 232)"/>
+      <ellipse cx="150" cy="238" rx="22" ry="36" fill="#f7a8b8" transform="rotate(-22 150 238)"/>
+      <ellipse cx="330" cy="232" rx="40" ry="58" fill="#f5c542" transform="rotate(22 330 232)"/>
+      <ellipse cx="330" cy="238" rx="22" ry="36" fill="#f7a8b8" transform="rotate(22 330 238)"/>
+      <!-- 体 -->
+      <ellipse cx="240" cy="352" rx="150" ry="122" fill="url(#body)"/>
+      <!-- おなか -->
+      <ellipse cx="240" cy="392" rx="92" ry="66" fill="#fff8dc" opacity="0.9"/>
+      <!-- ほっぺ -->
+      <ellipse cx="150" cy="352" rx="24" ry="16" fill="#ff8fa3" opacity="0.8"/>
+      <ellipse cx="330" cy="352" rx="24" ry="16" fill="#ff8fa3" opacity="0.8"/>
+      <!-- 閉じた目（すやすや） -->
+      <path d="M172 318 q26 22 52 0" fill="none" stroke="#3b2a1a" stroke-width="10" stroke-linecap="round"/>
+      <path d="M256 318 q26 22 52 0" fill="none" stroke="#3b2a1a" stroke-width="10" stroke-linecap="round"/>
+      <!-- 口 -->
+      <path d="M228 364 q12 12 24 0" fill="none" stroke="#3b2a1a" stroke-width="7" stroke-linecap="round"/>
+      <!-- しっぽ -->
+      <path d="M382 400 q60 -30 40 -80 q-14 -30 -46 -18" fill="none" stroke="#f5c542" stroke-width="34" stroke-linecap="round"/>
+      <path d="M382 400 q60 -30 40 -80 q-14 -30 -46 -18" fill="none" stroke="#e0a82a" stroke-width="12" stroke-linecap="round" opacity="0.5"/>
+      <!-- きのみ（枕元） -->
+      <circle cx="92" cy="436" r="26" fill="#4fb3ff"/>
+      <circle cx="82" cy="426" r="8" fill="#ffffff" opacity="0.6"/>
+      <path d="M92 410 q4 -18 22 -22" fill="none" stroke="#3ac26b" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    </g>
+  </g>
+</svg>

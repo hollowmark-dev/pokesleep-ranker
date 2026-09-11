@@ -47,6 +47,7 @@ const PRECACHE_URLS = [
   './js/views/view-capture.js',
   './js/views/view-detail.js',
   './js/views/view-settings.js',
+  './icons/icon.svg',
   './icons/icon-192.png',
   './icons/apple-touch-icon.png',
   './icons/icon-512.png',
