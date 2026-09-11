@@ -51,6 +51,15 @@ Claude Code から確認する場合は `.claude/launch.json` の `pokesleep-ran
 `docs/_samples/`（同じく管理外）にコピーして `http://localhost:8032/_samples/xxx.jpg` として
 ブラウザから読み込めるようにしてください。
 
+### 公開前に必ず行うこと
+
+```
+python tools/bump-sw.py
+```
+
+`docs/sw.js` のバージョン番号を書き換えます。これを忘れると Service Worker が更新されず、
+利用者の端末は古いJSをキャッシュから使い続けて「更新」の案内も出ません。
+
 ## vendorライブラリ（tesseract.js）の取得方法
 
 `docs/vendor/` には以下をピン留めしたバージョンで同梱しています。
