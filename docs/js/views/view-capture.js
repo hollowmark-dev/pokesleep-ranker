@@ -1,7 +1,7 @@
 // スクショの読み取り → 確認フォーム → 判定（結果のお披露目）→ 保存。手入力と編集もこの画面で受ける。
 // OCRは必ず「確認フォーム」を挟む。確度の低い項目は赤枠＋「要確認」で目立たせる。
 
-import { el, toast, openBusy, formatTopPct } from '../ui.js';
+import { el, toast, openBusy, openModal, formatTopPct } from '../ui.js';
 import { navigate } from '../app.js';
 import { putIndividual, getIndividual, listIndividuals } from '../store.js';
 import { getSettings } from '../settings.js';
@@ -313,15 +313,70 @@ async function runOcr(root, file) {
   }
   renderForm(root, fromFields(fields), {
     canvas: fields && fields.debug ? fields.debug.canvas : null,
+    colorCanvas: fields && fields.debug ? fields.debug.colorCanvas : null,
+    anchors: fields && fields.debug ? fields.debug.anchors : null,
+    // 元のスクショは確認フォームの間だけ見られるようにする（保存はしない。保存・選び直しで破棄）
+    imageUrl: URL.createObjectURL(file),
     rawText: fields ? fields.rawText : '',
     fields,
   });
 }
 
+/** 確認フォームで持っていたスクショのURLを破棄する（保存後や選び直し時） */
+function releaseImage(ctx) {
+  if (ctx && ctx.imageUrl) {
+    try { URL.revokeObjectURL(ctx.imageUrl); } catch (_) { /* 二重解放は無視 */ }
+    ctx.imageUrl = null;
+  }
+}
+
+/** 元スクショを拡大して見るモーダル */
+function openScreenshotModal(ctx) {
+  if (!ctx || !ctx.imageUrl) return;
+  const img = el('img', { src: ctx.imageUrl, alt: '読み取ったスクショ', style: 'display:block;width:100%;height:auto;border-radius:8px' });
+  const closeBtn = el('button', { class: 'btn', type: 'button' }, '閉じる');
+  const box = el('div', {},
+    el('div', { class: 'small muted', style: 'margin-bottom:8px' }, '読み取ったスクショ（保存はされません）'),
+    img,
+    el('div', { class: 'actions' }, closeBtn));
+  const modal = openModal(box);
+  closeBtn.addEventListener('click', () => modal.close());
+}
+
+/** スクショから食材アイコンの行（Lv.30/60 タグ・アイコン・個数バッジ）を切り出した帯を返す */
+function ingredientStrip(ctx) {
+  const src = ctx && ctx.colorCanvas;
+  const a = ctx && ctx.anchors;
+  if (!src || !a || a.H1 == null) return null;
+  const s = a.scale || 1;
+  const x0 = Math.max(0, Math.round(430 * s));
+  const y0 = Math.max(0, Math.round(a.H1 - 548 * s));
+  const x1 = Math.min(src.width, Math.round(1080 * s));
+  const y1 = Math.min(src.height, Math.round(a.H1 - 378 * s));
+  const w = x1 - x0;
+  const h = y1 - y0;
+  if (w < 50 || h < 20) return null;
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  c.getContext('2d').drawImage(src, x0, y0, w, h, 0, 0, w, h);
+  c.style.cssText = 'display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;margin:0 0 10px';
+  c.title = 'スクショの食材欄';
+  return c;
+}
+
 function renderForm(root, model, ctx) {
   root.textContent = '';
   const editing = ctx.editing || null;
-  root.appendChild(el('h2', { class: 'mt-0' }, editing ? '個体を編集' : '読み取り結果を確認'));
+  const heading = el('h2', { class: 'mt-0' }, editing ? '個体を編集' : '読み取り結果を確認');
+  if (ctx.imageUrl) {
+    const viewBtn = el('button', { class: 'btn btn-small', type: 'button', style: 'margin-left:auto' }, 'スクショを見る');
+    viewBtn.addEventListener('click', () => openScreenshotModal(ctx));
+    root.appendChild(el('div', { style: 'display:flex;align-items:center;gap:10px;margin-bottom:8px' }, heading, viewBtn));
+    heading.style.margin = '0';
+  } else {
+    root.appendChild(heading);
+  }
 
   // ── 基本 ──
   const specialtySel = select(SPECIALTIES, model.specialty);
@@ -394,6 +449,8 @@ function renderForm(root, model, ctx) {
   const ingCard = el('div', { class: 'card' },
     el('h3', { class: 'mt-0' }, '食材構成'),
     el('p', { class: 'small muted mt-0' }, '個数はスクショから読み取ります。食材が絞れない枠は選んでください。'));
+  const strip = ingredientStrip(ctx);
+  if (strip) ingCard.appendChild(strip);
   for (let i = 0; i < 3; i++) {
     const sel = document.createElement('select');
     sel.style.flex = '1 1 auto';
@@ -541,6 +598,7 @@ function renderForm(root, model, ctx) {
   const saveBtn = el('button', { class: 'btn btn-primary', type: 'button' }, '保存する');
   saveBtn.hidden = true;
   const retry = on(el('button', { class: 'btn', type: 'button' }, editing ? 'やめる' : '選び直す'), 'click', () => {
+    releaseImage(ctx);
     if (editing) navigate('#/mon/' + editing.id);
     else renderChooser(root);
   });
@@ -671,6 +729,7 @@ function renderForm(root, model, ctx) {
     saveBtn.disabled = true;
     try {
       await putIndividual(obj);
+      releaseImage(ctx);
       toast('保存しました');
       navigate('#/mon/' + obj.id);
     } catch (_) {

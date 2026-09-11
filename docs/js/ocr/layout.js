@@ -524,6 +524,7 @@ export async function parseScreenshot(file, onProgress) {
 
   out.rawText = out.debug.regions.map((r) => `[${r.field}] ${r.rawText}`).join('\n');
   out.debug.canvas = canvas; // 確認画面のサムネイル用（保存はしない）
+  out.debug.colorCanvas = colorCanvas || null; // 確認画面で食材アイコン行を切り出して見せる用（保存はしない）
 
   // アンカーが欠けていた分だけ、従来の全面OCRで埋める
   if (!complete) {
