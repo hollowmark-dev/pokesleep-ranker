@@ -516,3 +516,19 @@ div.wtable > table tr:last-child td { border-bottom: none; }
   color: var(--muted);
   padding: 40px 16px;
 }
+
+/* ── 判定結果のお披露目 ─────────────────────────────── */
+
+.result-card { text-align: center; }
+.result-card .grade-badge-lg { margin: 6px auto 10px; }
+.result-pct { font-size: 26px; font-weight: 800; }
+.result-rank { font-size: 14px; margin-top: 2px; }
+.result-local { margin-top: 14px; text-align: left; }
+.result-local h4 { margin: 0 0 6px; font-size: 14px; }
+.grade-roll { background: #b9bfc3; }
+.grade-pop { animation: grade-pop .45s cubic-bezier(.2, 1.4, .4, 1); }
+@keyframes grade-pop {
+  0% { transform: scale(.6); opacity: .4; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}

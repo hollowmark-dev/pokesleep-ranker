@@ -1,11 +1,11 @@
-// スクショの読み取り → 確認フォーム → 保存。手入力と編集もこの画面で受ける。
+// スクショの読み取り → 確認フォーム → 判定（結果のお披露目）→ 保存。手入力と編集もこの画面で受ける。
 // OCRは必ず「確認フォーム」を挟む。確度の低い項目は赤枠＋「要確認」で目立たせる。
 
-import { el, toast, openBusy } from '../ui.js';
+import { el, toast, openBusy, formatTopPct } from '../ui.js';
 import { navigate } from '../app.js';
-import { putIndividual, getIndividual } from '../store.js';
+import { putIndividual, getIndividual, listIndividuals } from '../store.js';
 import { getSettings } from '../settings.js';
-import { individualScore, grade } from '../score/score.js';
+import { individualScore, grade, rankAmong } from '../score/score.js';
 import { getDistribution } from '../score/dist.js';
 import {
   SPECIALTIES, SUBSKILLS, NATURES, MAIN_SKILLS, SUBSKILL_UNLOCK_LEVELS,
@@ -356,10 +356,10 @@ function renderForm(root, model, ctx) {
     field('呼び名', nickInput),
     field('メモ', noteArea)));
 
-  // ── スコアのプレビュー ──
-  const previewBody = el('div', { class: 'score-preview', style: 'display:flex;align-items:center;flex-wrap:wrap;gap:2px' },
-    el('span', { class: 'muted small' }, '計算中…'));
-  root.appendChild(el('div', { class: 'card' }, el('h3', { class: 'mt-0' }, '暫定評価'), previewBody));
+  // ── 判定結果（「判定する」を押すまで伏せておく）──
+  const resultCard = el('div', { class: 'card result-card' });
+  resultCard.hidden = true;
+  root.appendChild(resultCard);
 
   // ── OCRの生テキスト・サムネイル ──
   if (ctx.rawText || ctx.canvas) {
@@ -389,12 +389,14 @@ function renderForm(root, model, ctx) {
   }
 
   // ── 操作 ──
-  const saveBtn = el('button', { class: 'btn btn-primary', type: 'button' }, '保存');
+  const judgeBtn = el('button', { class: 'btn btn-primary', type: 'button' }, '判定する');
+  const saveBtn = el('button', { class: 'btn btn-primary', type: 'button' }, '保存する');
+  saveBtn.hidden = true;
   const retry = on(el('button', { class: 'btn', type: 'button' }, editing ? 'やめる' : '選び直す'), 'click', () => {
     if (editing) navigate('#/mon/' + editing.id);
     else renderChooser(root);
   });
-  root.appendChild(el('div', { class: 'btn-row' }, saveBtn, retry));
+  root.appendChild(el('div', { class: 'btn-row' }, judgeBtn, saveBtn, retry));
 
   // ── フォームの値を読み出す ──
   function readModel() {
@@ -420,63 +422,69 @@ function renderForm(root, model, ctx) {
     };
   }
 
-  // ── ライブプレビュー（150ms デバウンス）──
-  let timer = null;
-  let token = 0;
-  async function updatePreview() {
-    const my = ++token;
-    const m = readModel();
-    previewBody.textContent = '';
+  // ── 判定（結果はボタンを押すまで見せない。フォームを直したら伏せ直す）──
+  function validate(m) {
     if (!m.specialty) {
-      previewBody.appendChild(el('span', { class: 'muted small' }, 'とくいタイプを選ぶと順位が出ます'));
-      return;
+      toast('とくいタイプを選んでください', 'error');
+      specialtySel.focus();
+      return false;
     }
-    let settings = null;
-    let score = 0;
-    let dist = null;
-    try {
-      settings = await getSettings();
-      score = individualScore(m, settings);
-      dist = await getDistribution(m.specialty, settings);
-    } catch (_) {
-      if (my !== token) return;
-      previewBody.textContent = '';
-      previewBody.appendChild(el('span', { class: 'muted small' }, '評価を計算できませんでした'));
-      return;
+    if (!m.subskills.some(Boolean) && !m.nature) {
+      toast('サブスキルかせいかくを1つ以上入れてください', 'error');
+      return false;
     }
-    if (my !== token) return;
-    const topPct = dist.topPct(score);
-    const rank = dist.rank(score);
-    const g = grade(topPct, settings);
-    previewBody.textContent = '';
-    previewBody.appendChild(el('span', { class: 'grade grade-' + g }, g));
-    previewBody.appendChild(el('strong', { style: 'margin-left:10px' }, '上位 ' + topPct.toFixed(1) + '%'));
-    previewBody.appendChild(el('span', { class: 'muted small', style: 'margin-left:10px' },
-      rank.toLocaleString('ja-JP') + '位 / 全' + dist.total.toLocaleString('ja-JP')));
+    return true;
   }
-  function schedule() {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => { timer = null; updatePreview(); }, 150);
+  function hideResult() {
+    if (resultCard.hidden) return;
+    resultCard.hidden = true;
+    resultCard.textContent = '';
+    saveBtn.hidden = true;
+    judgeBtn.hidden = false;
   }
   for (const node of [specialtySel, speciesInput, levelInput, spInput, helpMinInput, helpSecInput,
     carryInput, mainSel, mainLvInput, natureSel, ...subSels, ...unlockInputs]) {
-    on(node, 'input', schedule);
-    on(node, 'change', schedule);
+    on(node, 'input', hideResult);
+    on(node, 'change', hideResult);
   }
-  updatePreview();
+  on(judgeBtn, 'click', async () => {
+    const m = readModel();
+    if (!validate(m)) return;
+    judgeBtn.disabled = true;
+    let result;
+    try {
+      const settings = await getSettings();
+      const score = individualScore(m, settings);
+      const dist = await getDistribution(m.specialty, settings);
+      const topPct = dist.topPct(score);
+      const saved = (await listIndividuals()).filter((x) => !editing || x.id !== editing.id);
+      const sameType = saved.filter((x) => x.specialty === m.specialty);
+      const sameSpecies = m.species ? sameType.filter((x) => x.species === m.species) : [];
+      result = {
+        grade: grade(topPct, settings),
+        topPct,
+        rank: dist.rank(score),
+        total: dist.total,
+        typeRank: rankAmong([...sameType, m], m, settings),
+        speciesRank: sameSpecies.length ? rankAmong([...sameSpecies, m], m, settings) : null,
+        typeName: (SPECIALTIES.find((t) => t.id === m.specialty) || {}).name || '',
+        speciesName: m.speciesName,
+      };
+    } catch (_) {
+      judgeBtn.disabled = false;
+      toast('評価を計算できませんでした', 'error');
+      return;
+    }
+    judgeBtn.hidden = true;
+    judgeBtn.disabled = false;
+    await revealResult(resultCard, result);
+    saveBtn.hidden = false;
+  });
 
   // ── 保存 ──
   on(saveBtn, 'click', async () => {
     const m = readModel();
-    if (!m.specialty) {
-      toast('とくいタイプを選んでください', 'error');
-      specialtySel.focus();
-      return;
-    }
-    if (!m.subskills.some(Boolean) && !m.nature) {
-      toast('サブスキルかせいかくを1つ以上入れてください', 'error');
-      return;
-    }
+    if (!validate(m)) return;
     const now = Date.now();
     const obj = {
       id: editing ? editing.id : newId(),
@@ -509,6 +517,59 @@ function renderForm(root, model, ctx) {
       toast('保存に失敗しました', 'error');
     }
   });
+}
+
+/** 判定結果をルーレット風に見せる。reduced-motion のときは即表示 */
+async function revealResult(card, r) {
+  const quick = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const badge = el('div', { class: 'grade-badge-lg grade-roll' }, '?');
+  const pctEl = el('div', { class: 'result-pct' }, '上位 —%');
+  const rankEl = el('div', { class: 'result-rank muted' }, '');
+  const noteEl = el('div', { class: 'small muted' }, '全組み合わせを均等とみなした順位');
+  const localEl = el('div', { class: 'result-local' });
+  card.textContent = '';
+  card.append(el('h3', { class: 'mt-0' }, '判定結果'), badge, pctEl, rankEl, noteEl, localEl);
+  card.hidden = false;
+  card.scrollIntoView({ behavior: quick ? 'auto' : 'smooth', block: 'center' });
+
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+  if (!quick) {
+    // ランクを回す（0.08秒刻みで約1.3秒）
+    const letters = ['D', 'C', 'B', 'A', 'S'];
+    let i = 0;
+    const spin = setInterval(() => { badge.textContent = letters[i++ % letters.length]; }, 80);
+    // 上位%は 100 から本当の値へ数える
+    const t0 = performance.now();
+    const dur = 1300;
+    // requestAnimationFrame は非表示タブで止まるので、時間ベースの setInterval で回す
+    await new Promise((done) => {
+      const timer = setInterval(() => {
+        const k = Math.min(1, (performance.now() - t0) / dur);
+        const eased = 1 - Math.pow(1 - k, 3);
+        const v = 100 - (100 - r.topPct) * eased;
+        pctEl.textContent = '上位 ' + (k < 1 ? v.toFixed(1) + '%' : formatTopPct(r.topPct));
+        if (k >= 1) { clearInterval(timer); done(); }
+      }, 40);
+    });
+    clearInterval(spin);
+  }
+  badge.className = 'grade-badge-lg grade-' + r.grade + (quick ? '' : ' grade-pop');
+  badge.textContent = r.grade;
+  pctEl.textContent = '上位 ' + formatTopPct(r.topPct);
+  rankEl.textContent = r.rank.toLocaleString('ja-JP') + '位 / 全 ' + r.total.toLocaleString('ja-JP') + ' パターン';
+  if (!quick) await sleep(250);
+  const lines = [];
+  if (r.typeRank && r.typeRank.total > 1) {
+    lines.push('手持ちの' + r.typeName + 'タイプの中で ' + r.typeRank.rank + ' / ' + r.typeRank.total + ' 位');
+  }
+  if (r.speciesRank && r.speciesRank.total > 1) {
+    lines.push('手持ちの' + (r.speciesName || '同じ種族') + 'の中で ' + r.speciesRank.rank + ' / ' + r.speciesRank.total + ' 位');
+  }
+  if (lines.length) {
+    localEl.append(el('h4', {}, '蓄積内の順位'), ...lines.map((t) => el('div', {}, t)));
+  } else {
+    localEl.append(el('div', { class: 'small muted' }, '保存すると、次からは手持ちの中での順位も出ます'));
+  }
 }
 
 /** ocr: { rawText, fieldConf } を作る。手入力・編集のみなら null のまま */
