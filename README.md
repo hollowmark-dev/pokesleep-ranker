@@ -82,6 +82,9 @@ docs/vendor/LICENSES/                 （tesseract.js・tesseract.js-core・tess
 
 ## 重み（評価ルール）の正本と管理者モード
 
+重みの決め方と根拠は [docs/WEIGHTS.md](docs/WEIGHTS.md) にまとめ、元にした調査レポート（効果値の検証、
+コミュニティの厳選基準、YouTube解説者の基準）は `research/` に置いています。
+
 順位判定に使う重み（`slotWeights` / `subskillWeights` / `natureEffectWeights` /
 `gradeThresholds`）は、全員が同じ基準で見られるよう **`docs/js/data/defaults.js` の
 `DEFAULT_SETTINGS` をリポジトリ上の正本**として扱います。一般ユーザーの設定画面は

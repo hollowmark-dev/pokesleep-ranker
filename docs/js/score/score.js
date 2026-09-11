@@ -27,7 +27,16 @@ export function natureScore(specialty, natureId, settings) {
   if (!nature) return 0;
   const up = nature.up && table.up ? num(table.up[nature.up]) : 0;
   const down = nature.down && table.down ? num(table.down[nature.down]) : 0;
-  return up + down;
+  // せいかくの重みはサブスキルと同じ 0..100 尺度。枠1のサブスキル1つ分と同じ倍率で加算する
+  // （枠の重みの最大値を掛ける）。こうしないと性格が 1000 点級のサブスキルに埋もれてしまう。
+  return (up + down) * natureScale(settings);
+}
+
+/** せいかく重みに掛ける倍率＝枠の重みの最大値（枠1相当）。枠の重みが無ければ 1 */
+export function natureScale(settings) {
+  const slots = settings && Array.isArray(settings.slotWeights) ? settings.slotWeights.map(num) : [];
+  const m = slots.length ? Math.max(...slots) : 1;
+  return Number.isFinite(m) && m > 0 ? m : 1;
 }
 
 /**
