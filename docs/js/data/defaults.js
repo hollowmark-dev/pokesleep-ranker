@@ -11,7 +11,7 @@ export const SETTINGS_SCHEMA_VERSION = 1;
 export const DEFAULT_SETTINGS = {
   key: 'current',
   schemaVersion: 1,
-  weightsVersion: '2026-09-12.2',
+  weightsVersion: '2026-09-12.3',
 
   // サブスキル枠1..5の重み。Ver.3.6.0（2026-06）で解放Lvが 10/25/50/70/80 になり
   // 5枠すべてが現実的に届くため、枠1〜3は同じ、枠4・5だけ少し下げる。
@@ -121,9 +121,11 @@ export const DEFAULT_SETTINGS = {
       up: { speed: 45, ing: 68, skill: 4, energy: 8, exp: 12 },
       down: { speed: -30, ing: -68, skill: -4, energy: -15, exp: -18 },
     },
+    // スキルタイプの食材確率: 発動抽選には影響せず、食材おてつだいが増えるぶんきのみが減るだけなので
+    // ▲は小さな減点、▼は小さな加点（しんちょうがスキル最良になる根拠）。
     skill: {
-      up: { speed: 40, ing: 3, skill: 68, energy: 8, exp: 12 },
-      down: { speed: -27, ing: -2, skill: -68, energy: -15, exp: -18 },
+      up: { speed: 40, ing: -4, skill: 68, energy: 8, exp: 12 },
+      down: { speed: -27, ing: 4, skill: -68, energy: -15, exp: -18 },
     },
     // オールは現状2匹とも性格固定（無補正）なので実質使われない。将来の追加に備えた予備値。
     all: {
