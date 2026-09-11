@@ -422,19 +422,20 @@ function renderForm(root, model, ctx) {
   // ── サブスキル5枠 ──
   const subSels = [];
   const unlockInputs = [];
-  const subCard = el('div', { class: 'card' }, el('h3', { class: 'mt-0' }, 'サブスキル（枠1が最重要）'));
+  const subCard = el('div', { class: 'card' }, el('h3', { class: 'mt-0' }, 'サブスキル'));
   for (let i = 0; i < 5; i++) {
     const sel = select(SUBSKILLS, model.subskills[i]);
-    const unlock = numberInput(model.unlockLevels[i], { min: 1, max: 100 });
-    unlock.classList.add('unlock-input');
-    unlock.style.width = '5em';
+    // 解放Lvはゲーム仕様で枠ごとに固定（10/25/50/70/80）なので編集させず表示だけにする
+    const unlockLv = model.unlockLevels[i] ?? DEFAULT_UNLOCK[i];
+    const unlock = numberInput(unlockLv, { min: 1, max: 100 });
+    unlock.type = 'hidden';
     sel.style.flex = '1 1 auto';
     sel.style.minWidth = '0';
     subSels.push(sel);
     unlockInputs.push(unlock);
     subCard.appendChild(field(
-      '枠' + (i + 1),
-      el('div', { class: 'inline-2', style: INLINE }, sel, el('span', { class: 'small muted' }, '解放Lv'), unlock),
+      '枠' + (i + 1) + '（Lv.' + unlockLv + '）',
+      el('div', { class: 'inline-2', style: INLINE }, sel, unlock),
       model.conf['subskill' + (i + 1)],
     ));
   }
@@ -445,6 +446,7 @@ function renderForm(root, model, ctx) {
   // 種族の候補表と突き合わせて絞る。一意に決まらない枠はここで選んでもらう。
   const ingSels = [];
   const ingCountInputs = [];
+  const ingCountWraps = [];
   const ingRows = [];
   const ingCard = el('div', { class: 'card' },
     el('h3', { class: 'mt-0' }, '食材構成'),
@@ -458,11 +460,13 @@ function renderForm(root, model, ctx) {
     const cnt = numberInput(null, { min: 1, max: 20, placeholder: '個' });
     cnt.classList.add('ing-count-input');
     cnt.style.width = '5em';
+    const times = el('span', { class: 'small muted' }, '×');
     ingSels.push(sel);
     ingCountInputs.push(cnt);
+    ingCountWraps.push([times, cnt]);
     const row = field(
       '枠' + (i + 1) + '（Lv.' + ING_UNLOCK[i] + '）',
-      el('div', { class: 'inline-2', style: INLINE }, sel, el('span', { class: 'small muted' }, '×'), cnt),
+      el('div', { class: 'inline-2', style: INLINE }, sel, times, cnt),
       model.conf['ingredient' + (i + 1)],
     );
     ingRows.push(row);
@@ -514,12 +518,25 @@ function renderForm(root, model, ctx) {
     markLowConf(ingRows[i], !(ingSels[i].value && ingCountInputs[i].value.trim()));
   }
 
+  /** 候補表がある種族なら個数は候補から決まるので入力欄を隠し、選択中の候補の個数を反映する */
+  function syncCountVisibility(i) {
+    const opts = [...ingSels[i].options].filter((o) => o.value);
+    const hasTable = opts.length > 0 && opts.every((o) => o.dataset && o.dataset.count);
+    for (const node of ingCountWraps[i]) node.hidden = hasTable;
+    if (hasTable) {
+      const o = ingSels[i].selectedOptions && ingSels[i].selectedOptions[0];
+      if (o && o.dataset && o.dataset.count) ingCountInputs[i].value = o.dataset.count;
+    }
+  }
+
   let ingSpeciesId = speciesIdByName(speciesInput.value.trim());
   for (let i = 0; i < 3; i++) {
     fillIngOptions(i, ingSpeciesId);
     const v = model.ingredients[i];
     selectIng(i, v ? v.ing : null);
     ingCountInputs[i].value = (v && v.count != null) ? String(v.count) : '';
+    syncCountVisibility(i);
+    markIngRow(i);
     on(ingSels[i], 'change', () => {
       const o = ingSels[i].selectedOptions && ingSels[i].selectedOptions[0];
       if (o && o.dataset && o.dataset.count) ingCountInputs[i].value = o.dataset.count;
@@ -541,6 +558,7 @@ function renderForm(root, model, ctx) {
       selectIng(i, r ? r.ing : null);
       const c = (r && r.count != null) ? r.count : counts[i];
       ingCountInputs[i].value = c == null ? '' : String(c);
+      syncCountVisibility(i);
       markIngRow(i);
     }
   }
