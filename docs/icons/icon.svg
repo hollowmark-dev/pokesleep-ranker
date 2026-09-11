@@ -6,8 +6,8 @@
       <stop offset="1" stop-color="#3ac26b"/>
     </linearGradient>
     <radialGradient id="body" cx="0.4" cy="0.35" r="0.75">
-      <stop offset="0" stop-color="#fff6c8"/>
-      <stop offset="1" stop-color="#f5c542"/>
+      <stop offset="0" stop-color="#ffcf8a"/>
+      <stop offset="1" stop-color="#ef9a3c"/>
     </radialGradient>
     <radialGradient id="moon" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0" stop-color="#fff9d6"/>
@@ -44,28 +44,55 @@
       <text x="270" y="140" font-size="70" transform="rotate(-12 270 140)">Z</text>
     </g>
 
-    <!-- モンスター本体 -->
+    <!-- 茶トラ猫本体（すやすや） -->
     <g>
-      <!-- 耳 -->
-      <ellipse cx="150" cy="232" rx="40" ry="58" fill="#f5c542" transform="rotate(-22 150 232)"/>
-      <ellipse cx="150" cy="238" rx="22" ry="36" fill="#f7a8b8" transform="rotate(-22 150 238)"/>
-      <ellipse cx="330" cy="232" rx="40" ry="58" fill="#f5c542" transform="rotate(22 330 232)"/>
-      <ellipse cx="330" cy="238" rx="22" ry="36" fill="#f7a8b8" transform="rotate(22 330 238)"/>
+      <!-- しっぽ（縞つき）: 体の後ろに回す -->
+      <path d="M378 404 q66 -28 46 -84 q-14 -34 -50 -22" fill="none" stroke="#ef9a3c" stroke-width="36" stroke-linecap="round"/>
+      <path d="M378 404 q66 -28 46 -84 q-14 -34 -50 -22" fill="none" stroke="#c9702a" stroke-width="36" stroke-linecap="butt" stroke-dasharray="13 24" stroke-dashoffset="6" opacity="0.85"/>
+      <!-- 耳（三角） -->
+      <path d="M104 262 L136 162 L204 236 Z" fill="#ef9a3c"/>
+      <path d="M120 250 L140 190 L184 236 Z" fill="#f7a8b8"/>
+      <path d="M376 262 L344 162 L276 236 Z" fill="#ef9a3c"/>
+      <path d="M360 250 L340 190 L296 236 Z" fill="#f7a8b8"/>
       <!-- 体 -->
       <ellipse cx="240" cy="352" rx="150" ry="122" fill="url(#body)"/>
-      <!-- おなか -->
-      <ellipse cx="240" cy="392" rx="92" ry="66" fill="#fff8dc" opacity="0.9"/>
+      <!-- 額の M 模様と背中の縞 -->
+      <g fill="none" stroke="#c9702a" stroke-width="13" stroke-linecap="round" opacity="0.9">
+        <path d="M212 246 q-6 22 -2 44"/>
+        <path d="M240 236 q0 24 0 48"/>
+        <path d="M268 246 q6 22 2 44"/>
+        <path d="M116 346 q-4 26 8 48"/>
+        <path d="M134 322 q-8 30 0 60"/>
+        <path d="M364 346 q4 26 -8 48"/>
+        <path d="M346 322 q8 30 0 60"/>
+      </g>
+      <!-- おなか（白） -->
+      <ellipse cx="240" cy="404" rx="96" ry="62" fill="#fff6e6" opacity="0.95"/>
+      <!-- 口元（白） -->
+      <ellipse cx="240" cy="366" rx="54" ry="34" fill="#fff6e6"/>
       <!-- ほっぺ -->
-      <ellipse cx="150" cy="352" rx="24" ry="16" fill="#ff8fa3" opacity="0.8"/>
-      <ellipse cx="330" cy="352" rx="24" ry="16" fill="#ff8fa3" opacity="0.8"/>
-      <!-- 閉じた目（すやすや） -->
-      <path d="M172 318 q26 22 52 0" fill="none" stroke="#3b2a1a" stroke-width="10" stroke-linecap="round"/>
-      <path d="M256 318 q26 22 52 0" fill="none" stroke="#3b2a1a" stroke-width="10" stroke-linecap="round"/>
-      <!-- 口 -->
-      <path d="M228 364 q12 12 24 0" fill="none" stroke="#3b2a1a" stroke-width="7" stroke-linecap="round"/>
-      <!-- しっぽ -->
-      <path d="M382 400 q60 -30 40 -80 q-14 -30 -46 -18" fill="none" stroke="#f5c542" stroke-width="34" stroke-linecap="round"/>
-      <path d="M382 400 q60 -30 40 -80 q-14 -30 -46 -18" fill="none" stroke="#e0a82a" stroke-width="12" stroke-linecap="round" opacity="0.5"/>
+      <ellipse cx="156" cy="350" rx="22" ry="14" fill="#ff8fa3" opacity="0.75"/>
+      <ellipse cx="324" cy="350" rx="22" ry="14" fill="#ff8fa3" opacity="0.75"/>
+      <!-- 閉じた目 -->
+      <path d="M170 316 q26 22 52 0" fill="none" stroke="#3b2a1a" stroke-width="10" stroke-linecap="round"/>
+      <path d="M258 316 q26 22 52 0" fill="none" stroke="#3b2a1a" stroke-width="10" stroke-linecap="round"/>
+      <!-- 鼻と口（ω） -->
+      <path d="M232 352 L248 352 L240 362 Z" fill="#f08a9b"/>
+      <path d="M222 366 q9 12 18 0 q9 12 18 0" fill="none" stroke="#3b2a1a" stroke-width="6" stroke-linecap="round"/>
+      <!-- ひげ -->
+      <g stroke="#3b2a1a" stroke-width="3.5" stroke-linecap="round" opacity="0.6">
+        <path d="M186 362 L126 352"/>
+        <path d="M186 374 L128 384"/>
+        <path d="M294 362 L354 352"/>
+        <path d="M294 374 L352 384"/>
+      </g>
+      <!-- 前足 -->
+      <ellipse cx="192" cy="458" rx="30" ry="18" fill="#f7b061"/>
+      <ellipse cx="288" cy="458" rx="30" ry="18" fill="#f7b061"/>
+      <g stroke="#c9702a" stroke-width="3" stroke-linecap="round" opacity="0.6">
+        <path d="M184 450 v12"/><path d="M196 449 v13"/>
+        <path d="M280 450 v12"/><path d="M292 449 v13"/>
+      </g>
       <!-- きのみ（枕元） -->
       <circle cx="92" cy="436" r="26" fill="#4fb3ff"/>
       <circle cx="82" cy="426" r="8" fill="#ffffff" opacity="0.6"/>
