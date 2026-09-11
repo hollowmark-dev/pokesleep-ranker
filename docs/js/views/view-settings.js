@@ -8,6 +8,7 @@ import {
 import { el, toast, confirmModal, openModal } from '../ui.js';
 import { exportAll, importFile } from '../io.js';
 import { SUBSKILLS, STATS, SPECIALTIES } from '../data/gamedata.js';
+import { INGREDIENTS } from '../data/ingredients.js';
 
 const RARITY_GROUPS = [
   { id: 'gold', label: '金', chip: 'chip-gold' },
@@ -210,6 +211,57 @@ export async function render(container, params) {
     return t;
   }
 
+  function ingredientValueTable() {
+    const values = settings.ingredientValues || {};
+    const list = [...INGREDIENTS].sort(
+      (a, b) => num(values[b.id]) - num(values[a.id]) || String(a.id).localeCompare(String(b.id))
+    );
+    const rows = [el('tr', {}, el('th', {}, '食材'), el('th', {}, '価値'))];
+    for (const ing of list) {
+      rows.push(el('tr', {},
+        el('th', {}, ing.name),
+        cell(`食材の価値 / ${ing.name}`, values[ing.id], (n, target) => {
+          if (!target.ingredientValues) target.ingredientValues = {};
+          target.ingredientValues[ing.id] = n;
+        })
+      ));
+    }
+    return wtable(...rows);
+  }
+
+  function ingredientWeightTable() {
+    const w = settings.ingredientWeights || {};
+    return wtable(
+      el('tr', {}, el('th', {}, 'とくいタイプ'), ...SPECIALTIES.map((s) => el('th', {}, s.name))),
+      el('tr', {}, el('th', {}, '効き方（%）'), ...SPECIALTIES.map((sp) => cell(
+        `食材構成の強さ / ${sp.name}`,
+        w[sp.id],
+        (n, target) => {
+          if (!target.ingredientWeights) target.ingredientWeights = {};
+          target.ingredientWeights[sp.id] = n;
+        }
+      )))
+    );
+  }
+
+  function uniformityTable() {
+    const b = settings.ingredientUniformityBonus || {};
+    const keys = [
+      ['same3', '3枠そろい'],
+      ['same2', '2枠そろい'],
+    ];
+    return wtable(
+      el('tr', {}, el('th', {}, 'そろい方'), el('th', {}, '加点（素点）')),
+      ...keys.map(([k, label]) => el('tr', {},
+        el('th', {}, label),
+        cell(`揃いボーナス / ${label}`, b[k], (n, target) => {
+          if (!target.ingredientUniformityBonus) target.ingredientUniformityBonus = {};
+          target.ingredientUniformityBonus[k] = n;
+        })
+      ))
+    );
+  }
+
   function gradeTable() {
     const keys = [
       ['S', 'S（上位◯%以内）'],
@@ -259,7 +311,8 @@ export async function render(container, params) {
     const parts = [
       el('h2', {}, `評価ルール v${settings.weightsVersion || '—'}`),
       el('p', { class: 'muted' },
-        '順位は、サブスキル5枠の並び方とせいかくの全パターンが同じ確率で出るものとみなして計算しています。'
+        '順位は、サブスキル5枠の並び方・せいかく・（種族が分かっていれば）食材構成の全パターンが'
+        + '同じ確率で出るものとみなして計算しています。'
         + '重みは利用者全員で共通の公式値です（この端末の設定では変わりません）。'),
     ];
     if (overridden) {
@@ -279,6 +332,20 @@ export async function render(container, params) {
       el('h3', {}, 'せいかく補正'),
       el('p', { class: 'muted' }, '上がるステータス（↑）と下がるステータス（↓）の加点・減点。サブスキルと同じ0〜100の尺度で、枠1のサブスキル1つ分と同じ倍率で加算します（例: 68 ＝ 枠1に重み68のサブスキルが付いたのと同じ価値）。きのみタイプの食材確率↓が加点なのは、きのみを拾う確率が上がるためです。'),
       natureTable(),
+      el('h3', {}, '食材の価値'),
+      el('p', { class: 'muted' },
+        '食材1個あたりの汎用価値（0〜100）。特定のレシピ専用ではなく「どの料理編成に移しても使えるか」で付けています。'
+        + '価値100の食材1個 ＝ 素点10点 ＝ 枠1に重み10のサブスキルが付いたのと同じ価値です。'),
+      ingredientValueTable(),
+      el('h3', {}, '食材構成の強さ'),
+      el('p', { class: 'muted' },
+        'とくいタイプごとに、食材構成の素点を何%効かせるか。きのみ・スキルは食材構成を見ないので0です。'),
+      ingredientWeightTable(),
+      el('h3', {}, '揃いボーナス'),
+      el('p', { class: 'muted' },
+        '3枠すべて同じ食材／2枠が同じ食材のときの加点（食材の素点と同じ尺度）。'
+        + '汎用寄りの方針なので控えめにしています。'),
+      uniformityTable(),
       el('h3', {}, 'ランクのしきい値'),
       gradeTable()
     );

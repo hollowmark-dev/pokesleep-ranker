@@ -7,6 +7,7 @@ import {
   SUBSKILLS, NATURES, MAIN_SKILLS, SUBSKILL_UNLOCK_LEVELS,
 } from '../data/gamedata.js';
 import { SPECIES } from '../data/species.js';
+import { SPECIES_INGREDIENTS } from '../data/ingredients.js';
 import { fileToCanvas, prepareCrop } from './image.js';
 import { recognizePrepared, recognize, PSM } from './engine.js';
 import {
@@ -26,6 +27,7 @@ export const LAYOUT_TUNING = {
   natureThreshold: 0.62,
   subPenalty: 0.9,       // 部分一致に掛ける減点（全体一致を優先させるため）
   cropScale: 2,          // 切り出しの拡大率
+  ingCropScale: 4,       // 食材の個数バッジは文字高15px(1080換算)しかないので強めに拡大する
   // アンカー検出
   greenBarMinRatio: 0.6, // 緑と判定した x サンプルの割合
   greenBarMinHeight: 20, // 1080換算の最小の帯の高さ
@@ -154,9 +156,12 @@ const rect = (s, x0, x1, y0, y1) => ({
   x0: Math.round(x0 * s), x1: Math.round(x1 * s), y0: Math.round(y0), y1: Math.round(y1),
 });
 
+/** 食材個数バッジ pill の内側 x 範囲（1080幅換算、枠1..3） */
+const ING_BADGE_X = [[558, 613], [739, 797], [916, 974]];
+
 /**
  * アンカーから全項目の矩形を組み立てる。
- * @returns {Array<{field:string, rect:object, slot?:number}>}
+ * @returns {Array<{field:string, rect:object, slot?:number, scale?:number}>}
  */
 export function buildRegions({ H1, H2, CB, scale: s }) {
   const regions = [];
@@ -168,6 +173,18 @@ export function buildRegions({ H1, H2, CB, scale: s }) {
     regions.push({ field: 'carry', rect: rect(s, 455, 760, H1 - 187 * s, H1 - 127 * s) });
     regions.push({ field: 'mainSkill', rect: rect(s, 265, 885, H1 + 172 * s, H1 + 224 * s) });
     regions.push({ field: 'mainSkillLv', rect: rect(s, 898, 988, H1 + 172 * s, H1 + 222 * s) });
+    // 食材3枠の個数バッジ（白い丸pill・こげ茶の「x1」）。アイコンは画像なので読まない。
+    // pill の外形は 1080換算で x 552..618 / 735..802 / 912..977、y = H1-417..H1-386。
+    // 金色の縁を二値化で拾わないよう、内側だけを切る。
+    for (let i = 0; i < 3; i++) {
+      const [x0, x1] = ING_BADGE_X[i];
+      regions.push({
+        field: 'ing',
+        slot: i,
+        rect: rect(s, x0, x1, H1 - 414 * s, H1 - 389 * s),
+        scale: LAYOUT_TUNING.ingCropScale,
+      });
+    }
   }
   if (CB != null) {
     // 5枠のチップ。2列・行優先。文字は枠の内側だけを切る（上端は茶色の解放レベルタグが被る）
@@ -273,6 +290,83 @@ function readCarry(text) {
   return v == null ? null : { value: v, conf: 0.7 };
 }
 
+// ── 食材の個数と、種族候補との突き合わせ ──────────────────
+
+// 「x」として許す文字。OCRは ×(全角) や X、ときに 乂/メ と読む
+const X_CHARS = /[xX×✕✖╳ｘＸχхΧメ乂]/g;
+
+/**
+ * 「x1」「×2」「x4」のバッジ1枚から個数を取り出す。
+ * @param {string} text
+ * @returns {{value:number, conf:number}|null}
+ */
+export function readIngredientCount(text) {
+  let t = String(text || '');
+  try { t = t.normalize('NFKC'); } catch (_) { /* 古い環境 */ }
+  t = t.replace(/[\s　]/g, '').replace(X_CHARS, 'x');
+  if (!t) return null;
+
+  const take = (s) => {
+    const v = parseInt(s, 10);
+    return (Number.isFinite(v) && v >= 1 && v <= 20) ? v : null;
+  };
+
+  // 1) 素直に「x のあとの数字」
+  let m = t.match(/x(\d{1,2})/);
+  if (m) {
+    const v = take(m[1]);
+    if (v != null) return { value: v, conf: 0.93 };
+  }
+  // 2) x のあとが英字に化けた（xl→x1, xS→x5, xZ→x2 …）
+  m = t.match(/x(.{1,2})/);
+  if (m) {
+    const v = take(digitsFix(m[1]).replace(/\D/g, ''));
+    if (v != null) return { value: v, conf: 0.8 };
+  }
+  // 3) x そのものが落ちた。数字だけでも拾う（バッジには個数しか書かれていない）
+  const only = t.match(/\d{1,2}/);
+  if (only) {
+    const v = take(only[0]);
+    if (v != null) return { value: v, conf: 0.6 };
+  }
+  const fixed = digitsFix(t).match(/\d{1,2}/);
+  if (fixed) {
+    const v = take(fixed[0]);
+    if (v != null) return { value: v, conf: 0.45 };
+  }
+  return null;
+}
+
+/**
+ * 読み取った個数と種族の候補表から、枠1..3の食材を決める。
+ * 候補が1つに絞れなければ `ing:null` にして、フォームで選ばせる。
+ * 枠1は候補が常に1つなので、個数が読めなくても種族さえ分かれば決まる。
+ * @param {string|null} speciesId
+ * @param {Array<number|null>} counts 枠1..3の個数（読めなければ null）
+ * @returns {Array<{ing:string|null, count:number|null}|null>} 3要素。両方 null の枠は null
+ */
+export function resolveIngredients(speciesId, counts) {
+  const table = (speciesId && SPECIES_INGREDIENTS) ? SPECIES_INGREDIENTS[speciesId] : null;
+  const out = [];
+  for (let i = 0; i < 3; i++) {
+    const count = (counts && counts[i] != null) ? counts[i] : null;
+    const pool = table ? table['slot' + (i + 1)] : null;
+    if (!Array.isArray(pool) || pool.length === 0) {
+      out.push(count == null ? null : { ing: null, count });
+      continue;
+    }
+    if (pool.length === 1) {
+      // 候補が1つしかない枠（枠1）は個数が読めなくても決まる
+      out.push({ ing: pool[0].ing, count: count == null ? pool[0].count : count });
+      continue;
+    }
+    const hits = count == null ? [] : pool.filter((c) => c && c.count === count);
+    if (hits.length === 1) out.push({ ing: hits[0].ing, count });
+    else out.push(count == null ? null : { ing: null, count });
+  }
+  return out;
+}
+
 /** チップ1枚のテキストからサブスキルを決める */
 function readChip(text) {
   const n = normalize(text);
@@ -296,6 +390,9 @@ function emptyResult() {
     mainSkill: F(null, 0),
     mainSkillLevel: F(null, 0),
     subskills: { value: [null, null, null, null, null], conf: [0, 0, 0, 0, 0] },
+    // 食材3枠。個数はバッジから読み、食材そのものは種族の候補表と突き合わせて決める
+    ingredientCounts: { value: [null, null, null], conf: [0, 0, 0] },
+    ingredients: { value: [null, null, null], conf: [0, 0, 0] },
     // 解放レベルはゲームのルールで枠ごとに固定。読み取らず既定値を入れる
     subskillUnlockLevels: { value: DEFAULT_UNLOCK.slice(), conf: [1, 1, 1, 1, 1] },
     nature: F(null, 0),
@@ -340,13 +437,16 @@ export async function parseScreenshot(file, onProgress) {
   // 領域ごとに1行ずつ読む
   const texts = {};
   const chipTexts = [null, null, null, null, null];
+  const ingTexts = [null, null, null];
   const total = regions.length || 1;
   for (let i = 0; i < regions.length; i++) {
     const reg = regions[i];
     emit(onProgress, `読み取り中 (${i + 1}/${total})`, 0.05 + 0.9 * (i / total));
     let raw = '';
     try {
-      const crop = prepareCrop(colorCanvas || canvas, reg.rect, { scale: LAYOUT_TUNING.cropScale });
+      const crop = prepareCrop(colorCanvas || canvas, reg.rect, {
+        scale: reg.scale || LAYOUT_TUNING.cropScale,
+      });
       const res = await recognizePrepared(crop, PSM.SINGLE_LINE, onProgress ? (p) => {
         if (p && /loading|initializ/i.test(String(p.status || ''))) {
           emit(onProgress, p.message || '準備中', 0.05);
@@ -357,6 +457,7 @@ export async function parseScreenshot(file, onProgress) {
       raw = '';
     }
     if (reg.field === 'chip') chipTexts[reg.slot] = raw;
+    else if (reg.field === 'ing') ingTexts[reg.slot] = raw;
     else texts[reg.field] = raw;
     out.debug.regions.push({
       field: reg.field + (reg.slot != null ? String(reg.slot + 1) : ''),
@@ -407,6 +508,15 @@ export async function parseScreenshot(file, onProgress) {
     }
   }
 
+  for (let i = 0; i < 3; i++) {
+    const c = readIngredientCount(ingTexts[i]);
+    if (c) {
+      out.ingredientCounts.value[i] = c.value;
+      out.ingredientCounts.conf[i] = c.conf;
+    }
+  }
+  applyIngredients(out);
+
   if (texts.nature) {
     const m = pickBest(texts.nature, NATURES, LAYOUT_TUNING.natureThreshold);
     if (m) out.nature = F(m.item.id, m.ratio);
@@ -422,6 +532,7 @@ export async function parseScreenshot(file, onProgress) {
       const ocr = await recognize(canvas, onProgress);
       const fb = parseFields(ocr);
       fillFromFallback(out, fb);
+      applyIngredients(out); // 種族が後から決まることがあるので候補表を引き直す
       out.rawText += '\n\n[全体]\n' + (ocr.rawText || '');
       out.debug.lines = fb.debug ? fb.debug.lines : [];
     } catch (_) { /* フォールバックが失敗しても主経路の結果は返す */ }
@@ -429,6 +540,19 @@ export async function parseScreenshot(file, onProgress) {
 
   emit(onProgress, '仕上げ中', 1);
   return out;
+}
+
+/**
+ * 読めた個数と種族から食材3枠を決め直す。種族が変わったときも呼べるように切り出してある。
+ * @param {object} out parseScreenshot の戻り値と同じ形
+ */
+function applyIngredients(out) {
+  const resolved = resolveIngredients(out.species.value, out.ingredientCounts.value);
+  out.ingredients.value = resolved;
+  out.ingredients.conf = resolved.map((r, i) => {
+    if (!r || !r.ing) return 0;                       // 候補が絞れていない＝フォームで選ばせる
+    return r.count == null ? 0.85 : Math.max(0.85, out.ingredientCounts.conf[i] || 0);
+  });
 }
 
 /** 主経路が null のままの項目だけを従来方式の結果で埋める */

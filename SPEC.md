@@ -174,3 +174,60 @@ engine.js は `workerPath/corePath/langPath` を **`new URL('../../vendor/…', 
 - 例外はユーザー向けに `toast(…, 'error')` で見せる。
 - 色・余白は `style.css` の CSS 変数を使う（`--accent`, `--bg`, `--card`, `--text`, `--muted`, `--danger`, `--gold`, `--silver`）。
 - 各ファイル冒頭に1〜3行の役割コメント（日本語）。
+
+## 食材構成（2026-09-12 追加）
+
+食材タイプの厳選で重要な「食材構成」を評価に加える。価値は**汎用寄り**（多くのレシピで使える食材を高く評価。揃いボーナスは控えめ）。
+
+### data/ingredients.js（named export）
+
+```js
+export const INGREDIENTS = [{ id:'tomato', name:'あんみんトマト', energy: 110, aliases: [] }, ...]; // 全食材
+export const INGREDIENT_UNLOCK_LEVELS = [1, 30, 60];
+// 種族ごとの候補。枠1は固定、枠2・3は候補から個体ごとに1つ決まる。count はその候補を選んだときの個数
+export const SPECIES_INGREDIENTS = {
+  jijiron: { slot1: [{ ing:'tomato', count:1 }], slot2: [{ ing:'tomato', count:2 }, { ing:'corn', count:2 }], slot3: [...] },
+  ...
+};
+```
+食材ID（英語 snake_case、固定）: `leek`(ふといながねぎ) `mushroom`(あじわいキノコ) `egg`(とくせんエッグ) `potato`(ほっこりポテト)
+`apple`(とくせんリンゴ) `herb`(げきからハーブ) `sausage`(マメミート) `milk`(モーモーミルク) `honey`(あまいミツ)
+`oil`(ピュアなオイル) `ginger`(あったかジンジャー) `tomato`(あんみんトマト) `cacao`(リラックスカカオ) `tail`(おいしいシッポ)
+`soybean`(ワカクサ大豆) `corn`(ワカクサコーン) `coffee`(めざましコーヒー)。新食材があれば同じ流儀で追加する。
+
+### 保存する個体への追加
+
+`ingredients: [ { ing:'tomato', count:1 } | null, { ing, count } | null, { ing, count } | null ]`（枠1..3。未解放でも
+スクショに個数は出るので、分かれば入れる）。
+
+### 設定（defaults.js）への追加
+
+```js
+ingredientValues: { tomato: 60, leek: 100, ... },     // 食材1個の汎用価値 0..100（全食材IDを持つ）
+ingredientWeights: { berry: 0, ingredient: 100, skill: 0, all: 40 }, // とくい別に食材構成をどれだけ効かせるか
+ingredientUniformityBonus: { same3: 10, same2: 4 },   // 3枠同じ／2枠同じの揃いボーナス（0..100尺度）
+```
+
+### 採点（score.js）
+
+```js
+export function ingredientScore(ind, settings)   // 0..100尺度の「素点」: Σ count_i × value_i / 100 × 10 + 揃いボーナス
+export function ingredientPoints(ind, settings)  // 素点 × ingredientWeights[spec]/100 × natureScale(settings)
+```
+- 素点の目安: 最高価値(100)の食材1個 ＝ 10点。個数合計14・価値100なら 140点 ＝ 枠1のサブスキル重み140相当。
+  つまり食材構成は食材タイプで「サブスキル1〜1.5枠分」の重みになる。
+- 合計スコア ＝ サブスキル ＋ せいかく ＋ 食材構成。`scoreBreakdown` に `ingredientPoints` と各枠の内訳を足す。
+- 枠が null の場合、その枠は 0 点。
+
+### 順位（dist.js）
+
+`getDistribution(specialty, settings, speciesId = null)`。`speciesId` が `SPECIES_INGREDIENTS` にあり、
+かつ `ingredientWeights[specialty] > 0` なら、その種族の食材構成の全パターン（枠1×枠2候補×枠3候補、最大9通り）の
+点数リストで既存のヒストグラムを畳み込む。`total` はパターン数の積になる。キャッシュキーには構成点数リストを含める。
+これで「全組み合わせ中の上位◯%」に食材構成も入る。
+
+### 読み取り（layout.js）
+
+食材アイコンは画像なのでOCRしない。**個数「x1」「x2」「x4」は文字**なので、名前カードの下の3か所（1080幅で
+y≈345、x≈585／766／945 付近）から読む。個数と種族の候補表を突き合わせて食材を決め、一意に決まらない場合は
+`{ ing:null, count }` にしてフォームで候補から選ばせる（候補は SPECIES_INGREDIENTS から）。

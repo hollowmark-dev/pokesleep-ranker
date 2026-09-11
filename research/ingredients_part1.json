@@ -1,0 +1,4128 @@
+{
+  "_meta": {
+    "date": "2026-09-12",
+    "count": 124,
+    "scope": "SPECIES[0..123] (フシギダネ 〜 バシャーモ)",
+    "method": "食材個数は公式の算出則 round(枠1食材エナジー × レベル係数(1/2.25/3.6) × とくい係数(食材=2,それ以外=1) ÷ その食材のエナジー) で決まる。各種族の候補A/B/Cは下記データセットから取得し、算出結果を日本語Wikiの個別ページ8件（フシギダネ・カモネギ・ヤドン・ラッキー・アチャモ・ニャース・イーブイ(ハロウィン)・ミュウ）と突き合わせて全件一致を確認した。とくい（specialty）はspecies.jsの122件すべてと一致。",
+    "sources": [
+      "https://wikiwiki.jp/poke_sleep/%E9%A3%9F%E6%9D%90",
+      "https://wikiwiki.jp/poke_sleep/%E3%83%95%E3%82%B7%E3%82%AE%E3%83%80%E3%83%8D",
+      "https://wikiwiki.jp/poke_sleep/%E3%82%AB%E3%83%A2%E3%83%8D%E3%82%AE",
+      "https://wikiwiki.jp/poke_sleep/%E3%83%A4%E3%83%89%E3%83%B3",
+      "https://wikiwiki.jp/poke_sleep/%E3%83%A9%E3%83%83%E3%82%AD%E3%83%BC",
+      "https://wikiwiki.jp/poke_sleep/%E3%82%A2%E3%83%81%E3%83%A3%E3%83%A2",
+      "https://wikiwiki.jp/poke_sleep/%E3%82%A4%E3%83%BC%E3%83%96%E3%82%A4%28%E3%83%8F%E3%83%AD%E3%82%A6%E3%82%A3%E3%83%B3%29",
+      "https://wikiwiki.jp/poke_sleep/%E3%83%8B%E3%83%A3%E3%83%BC%E3%82%B9",
+      "https://wikiwiki.jp/poke_sleep/%E3%83%9F%E3%83%A5%E3%82%A6",
+      "https://wikiwiki.jp/poke_sleep/%E3%83%9F%E3%83%A5%E3%82%A6%E3%83%84%E3%83%BC",
+      "https://game8.jp/pokemonsleep/803685",
+      "https://pokemongo-raku.com/post134944",
+      "https://github.com/nerolis-lab/nerolis-lab/tree/master/common/src/types/pokemon",
+      "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/utils/pokemon-utils/pokemon-constructors.ts"
+    ],
+    "verified": 123,
+    "unverified": 1,
+    "notes": "ニャース系・コイル系・カラカラ系・ワニノコ系・メリープ系の12種は枠3の候補が2つしかない（候補Cなし）。Wikiのニャースのページで実機どおりであることを確認済み。"
+  },
+  "_new_ingredients": [
+    {
+      "id": "avocado",
+      "name": "つやつやアボカド",
+      "energy": 162
+    },
+    {
+      "id": "pumpkin",
+      "name": "ずっしりカボチャ",
+      "energy": 250
+    }
+  ],
+  "fushigidane": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 5
+      },
+      {
+        "ing": "tomato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 7
+      },
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      }
+    ],
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%83%95%E3%82%B7%E3%82%AE%E3%83%80%E3%83%8D",
+    "verified_against": "https://wikiwiki.jp/poke_sleep/%E3%83%95%E3%82%B7%E3%82%AE%E3%83%80%E3%83%8D"
+  },
+  "fushigisou": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 5
+      },
+      {
+        "ing": "tomato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 7
+      },
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "fushigibana": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 5
+      },
+      {
+        "ing": "tomato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 7
+      },
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "hitokage": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 5
+      },
+      {
+        "ing": "ginger",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 7
+      },
+      {
+        "ing": "ginger",
+        "count": 7
+      },
+      {
+        "ing": "herb",
+        "count": 6
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "rizado": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 5
+      },
+      {
+        "ing": "ginger",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 7
+      },
+      {
+        "ing": "ginger",
+        "count": 7
+      },
+      {
+        "ing": "herb",
+        "count": 6
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "rizadon": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 5
+      },
+      {
+        "ing": "ginger",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 7
+      },
+      {
+        "ing": "ginger",
+        "count": 7
+      },
+      {
+        "ing": "herb",
+        "count": 6
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "zenigame": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 5
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 7
+      },
+      {
+        "ing": "cacao",
+        "count": 5
+      },
+      {
+        "ing": "sausage",
+        "count": 7
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kameru": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 5
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 7
+      },
+      {
+        "ing": "cacao",
+        "count": 5
+      },
+      {
+        "ing": "sausage",
+        "count": 7
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kamekkusu": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 5
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 7
+      },
+      {
+        "ing": "cacao",
+        "count": 5
+      },
+      {
+        "ing": "sausage",
+        "count": 7
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kyatapi": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 2
+      },
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 4
+      },
+      {
+        "ing": "tomato",
+        "count": 3
+      },
+      {
+        "ing": "soybean",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "toranseru": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 2
+      },
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 4
+      },
+      {
+        "ing": "tomato",
+        "count": 3
+      },
+      {
+        "ing": "soybean",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "batafuri": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 2
+      },
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 4
+      },
+      {
+        "ing": "tomato",
+        "count": 3
+      },
+      {
+        "ing": "soybean",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "koratta": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 3
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "ratta": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 3
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "abo": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "egg",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      },
+      {
+        "ing": "herb",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "abokku": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "egg",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      },
+      {
+        "ing": "herb",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pikachu": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 3
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pikachu_halloween": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 3
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pikachu_holiday": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 3
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pikachu_captain": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 3
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "raichu": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 3
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "sando": {
+    "slot1": [
+      {
+        "ing": "pumpkin",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "pumpkin",
+        "count": 2
+      },
+      {
+        "ing": "corn",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "pumpkin",
+        "count": 4
+      },
+      {
+        "ing": "corn",
+        "count": 6
+      },
+      {
+        "ing": "potato",
+        "count": 7
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "sandopan": {
+    "slot1": [
+      {
+        "ing": "pumpkin",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "pumpkin",
+        "count": 2
+      },
+      {
+        "ing": "corn",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "pumpkin",
+        "count": 4
+      },
+      {
+        "ing": "corn",
+        "count": 6
+      },
+      {
+        "ing": "potato",
+        "count": 7
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pippi": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "honey",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "honey",
+        "count": 3
+      },
+      {
+        "ing": "soybean",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pikushi": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "honey",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "honey",
+        "count": 3
+      },
+      {
+        "ing": "soybean",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "rokon": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 2
+      },
+      {
+        "ing": "corn",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 4
+      },
+      {
+        "ing": "corn",
+        "count": 3
+      },
+      {
+        "ing": "potato",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "rokon_alola": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 2
+      },
+      {
+        "ing": "corn",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 4
+      },
+      {
+        "ing": "corn",
+        "count": 3
+      },
+      {
+        "ing": "potato",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kyukon": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 2
+      },
+      {
+        "ing": "corn",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 4
+      },
+      {
+        "ing": "corn",
+        "count": 3
+      },
+      {
+        "ing": "potato",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kyukon_alola": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 2
+      },
+      {
+        "ing": "corn",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 4
+      },
+      {
+        "ing": "corn",
+        "count": 3
+      },
+      {
+        "ing": "potato",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "purin": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 4
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pukurin": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 4
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "diguda": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 5
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "leek",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "dagutorio": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 5
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "leek",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "nyasu": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%83%8B%E3%83%A3%E3%83%BC%E3%82%B9",
+    "verified_against": "https://wikiwiki.jp/poke_sleep/%E3%83%8B%E3%83%A3%E3%83%BC%E3%82%B9"
+  },
+  "perushian": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kodakku": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "apple",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 4
+      },
+      {
+        "ing": "apple",
+        "count": 6
+      },
+      {
+        "ing": "sausage",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "gorudakku": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "apple",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 4
+      },
+      {
+        "ing": "apple",
+        "count": 6
+      },
+      {
+        "ing": "sausage",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "manki": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "mushroom",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "mushroom",
+        "count": 2
+      },
+      {
+        "ing": "honey",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "okorizaru": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "mushroom",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "mushroom",
+        "count": 2
+      },
+      {
+        "ing": "honey",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "gadi": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 4
+      },
+      {
+        "ing": "sausage",
+        "count": 5
+      },
+      {
+        "ing": "milk",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "uindi": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 4
+      },
+      {
+        "ing": "sausage",
+        "count": 5
+      },
+      {
+        "ing": "milk",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "madatsubomi": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      },
+      {
+        "ing": "leek",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "utsudon": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      },
+      {
+        "ing": "leek",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "utsubotto": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      },
+      {
+        "ing": "leek",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "ishitsubute": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      },
+      {
+        "ing": "mushroom",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "goron": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      },
+      {
+        "ing": "mushroom",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "goronya": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      },
+      {
+        "ing": "mushroom",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "yadon": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "tail",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 4
+      },
+      {
+        "ing": "tail",
+        "count": 2
+      },
+      {
+        "ing": "tomato",
+        "count": 5
+      }
+    ],
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%83%A4%E3%83%89%E3%83%B3",
+    "verified_against": "https://wikiwiki.jp/poke_sleep/%E3%83%A4%E3%83%89%E3%83%B3"
+  },
+  "yadoran": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "tail",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 4
+      },
+      {
+        "ing": "tail",
+        "count": 2
+      },
+      {
+        "ing": "tomato",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "koiru": {
+    "slot1": [
+      {
+        "ing": "oil",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "oil",
+        "count": 2
+      },
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "oil",
+        "count": 4
+      },
+      {
+        "ing": "herb",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "reakoiru": {
+    "slot1": [
+      {
+        "ing": "oil",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "oil",
+        "count": 2
+      },
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "oil",
+        "count": 4
+      },
+      {
+        "ing": "herb",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kamonegi": {
+    "slot1": [
+      {
+        "ing": "leek",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "leek",
+        "count": 5
+      },
+      {
+        "ing": "sausage",
+        "count": 8
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "leek",
+        "count": 7
+      },
+      {
+        "ing": "sausage",
+        "count": 13
+      },
+      {
+        "ing": "ginger",
+        "count": 12
+      }
+    ],
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%82%AB%E3%83%A2%E3%83%8D%E3%82%AE",
+    "verified_against": "https://wikiwiki.jp/poke_sleep/%E3%82%AB%E3%83%A2%E3%83%8D%E3%82%AE"
+  },
+  "dodo": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "dodorio": {
+    "slot1": [
+      {
+        "ing": "soybean",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "soybean",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "soybean",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "gosu": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 5
+      },
+      {
+        "ing": "mushroom",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 7
+      },
+      {
+        "ing": "mushroom",
+        "count": 6
+      },
+      {
+        "ing": "oil",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "gosuto": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 5
+      },
+      {
+        "ing": "mushroom",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 7
+      },
+      {
+        "ing": "mushroom",
+        "count": 6
+      },
+      {
+        "ing": "oil",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "genga": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 5
+      },
+      {
+        "ing": "mushroom",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 7
+      },
+      {
+        "ing": "mushroom",
+        "count": 6
+      },
+      {
+        "ing": "oil",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "iwaku": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 4
+      },
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "potato",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "karakara": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "garagara": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "rakki": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 7
+      },
+      {
+        "ing": "honey",
+        "count": 8
+      }
+    ],
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%83%A9%E3%83%83%E3%82%AD%E3%83%BC",
+    "verified_against": "https://wikiwiki.jp/poke_sleep/%E3%83%A9%E3%83%83%E3%82%AD%E3%83%BC"
+  },
+  "garura": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      },
+      {
+        "ing": "soybean",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "bariyado": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      },
+      {
+        "ing": "leek",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kairosu": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 5
+      },
+      {
+        "ing": "apple",
+        "count": 5
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 7
+      },
+      {
+        "ing": "apple",
+        "count": 8
+      },
+      {
+        "ing": "sausage",
+        "count": 7
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "metamon": {
+    "slot1": [
+      {
+        "ing": "oil",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "oil",
+        "count": 5
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "oil",
+        "count": 7
+      },
+      {
+        "ing": "leek",
+        "count": 5
+      },
+      {
+        "ing": "tail",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "ibui": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "ibui_holiday": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "ibui_halloween": {
+    "slot1": [
+      {
+        "ing": "pumpkin",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "pumpkin",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "pumpkin",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 6
+      },
+      {
+        "ing": "milk",
+        "count": 9
+      }
+    ],
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%82%A4%E3%83%BC%E3%83%96%E3%82%A4%28%E3%83%8F%E3%83%AD%E3%82%A6%E3%82%A3%E3%83%B3%29",
+    "verified_against": "https://wikiwiki.jp/poke_sleep/%E3%82%A4%E3%83%BC%E3%83%96%E3%82%A4%28%E3%83%8F%E3%83%AD%E3%82%A6%E3%82%A3%E3%83%B3%29"
+  },
+  "shawazu": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "sandasu": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "busuta": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "miniryu": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 5
+      },
+      {
+        "ing": "corn",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 7
+      },
+      {
+        "ing": "corn",
+        "count": 7
+      },
+      {
+        "ing": "oil",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "hakuryu": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 5
+      },
+      {
+        "ing": "corn",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 7
+      },
+      {
+        "ing": "corn",
+        "count": 7
+      },
+      {
+        "ing": "oil",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kairyu": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 5
+      },
+      {
+        "ing": "corn",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 7
+      },
+      {
+        "ing": "corn",
+        "count": 7
+      },
+      {
+        "ing": "oil",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "myutsu": {
+    "_unverified": true,
+    "_note": "2026-09-14開始のイベントで実装予定。攻略サイト・Wikiとも食材欄は未確定（TBD）のため未記載。",
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%83%9F%E3%83%A5%E3%82%A6%E3%83%84%E3%83%BC"
+  },
+  "myu": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 2
+      },
+      {
+        "ing": "leek",
+        "count": 2
+      },
+      {
+        "ing": "herb",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 2
+      },
+      {
+        "ing": "avocado",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 4
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      },
+      {
+        "ing": "egg",
+        "count": 4
+      },
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "oil",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 5
+      },
+      {
+        "ing": "avocado",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "leek",
+        "count": 4
+      },
+      {
+        "ing": "egg",
+        "count": 6
+      },
+      {
+        "ing": "herb",
+        "count": 5
+      },
+      {
+        "ing": "sausage",
+        "count": 7
+      },
+      {
+        "ing": "oil",
+        "count": 6
+      },
+      {
+        "ing": "tail",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 7
+      },
+      {
+        "ing": "avocado",
+        "count": 4
+      }
+    ],
+    "_note": "ミュウは例外。枠1から7候補あり（固定ではない）、枠3は8候補（おいしいシッポが枠3のみ追加）。",
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%83%9F%E3%83%A5%E3%82%A6",
+    "verified_against": "https://wikiwiki.jp/poke_sleep/%E3%83%9F%E3%83%A5%E3%82%A6"
+  },
+  "chikorita": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "honey",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 4
+      },
+      {
+        "ing": "honey",
+        "count": 5
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "beirifu": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "honey",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 4
+      },
+      {
+        "ing": "honey",
+        "count": 5
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "meganiumu": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "honey",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 4
+      },
+      {
+        "ing": "honey",
+        "count": 5
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "hinoarashi": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 2
+      },
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "herb",
+        "count": 3
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "magumarashi": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 2
+      },
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "herb",
+        "count": 3
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "bakufun": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 2
+      },
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "herb",
+        "count": 3
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "waninoko": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "arigeitsu": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "odairu": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pichu": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 3
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pii": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "honey",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "honey",
+        "count": 3
+      },
+      {
+        "ing": "soybean",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "pupurin": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 4
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "togepi": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "togechikku": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "neiti": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      },
+      {
+        "ing": "apple",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "neitio": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 3
+      },
+      {
+        "ing": "apple",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "meripu": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 2
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 4
+      },
+      {
+        "ing": "egg",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "mokoko": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 2
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 4
+      },
+      {
+        "ing": "egg",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "denryu": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 2
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 4
+      },
+      {
+        "ing": "egg",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "usokki": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 4
+      },
+      {
+        "ing": "mushroom",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "upa": {
+    "slot1": [
+      {
+        "ing": "mushroom",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "mushroom",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "mushroom",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 10
+      },
+      {
+        "ing": "sausage",
+        "count": 12
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "upa_paldea": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 5
+      },
+      {
+        "ing": "coffee",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 7
+      },
+      {
+        "ing": "coffee",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 9
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "nuo": {
+    "slot1": [
+      {
+        "ing": "mushroom",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "mushroom",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 6
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "mushroom",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 10
+      },
+      {
+        "ing": "sausage",
+        "count": 12
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "efi": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "burakki": {
+    "slot1": [
+      {
+        "ing": "milk",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "milk",
+        "count": 2
+      },
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "milk",
+        "count": 4
+      },
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "yamikarasu": {
+    "slot1": [
+      {
+        "ing": "coffee",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "coffee",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "coffee",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 6
+      },
+      {
+        "ing": "herb",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "yadoking": {
+    "slot1": [
+      {
+        "ing": "cacao",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "cacao",
+        "count": 2
+      },
+      {
+        "ing": "tail",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "cacao",
+        "count": 4
+      },
+      {
+        "ing": "tail",
+        "count": 2
+      },
+      {
+        "ing": "tomato",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "sonansu": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "mushroom",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "mushroom",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "haganeru": {
+    "slot1": [
+      {
+        "ing": "tomato",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "tomato",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "tomato",
+        "count": 4
+      },
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "potato",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "tsubotsubo": {
+    "slot1": [
+      {
+        "ing": "oil",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "oil",
+        "count": 2
+      },
+      {
+        "ing": "coffee",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "oil",
+        "count": 4
+      },
+      {
+        "ing": "coffee",
+        "count": 3
+      },
+      {
+        "ing": "honey",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "herakurosu": {
+    "slot1": [
+      {
+        "ing": "honey",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "honey",
+        "count": 2
+      },
+      {
+        "ing": "mushroom",
+        "count": 1
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "honey",
+        "count": 4
+      },
+      {
+        "ing": "mushroom",
+        "count": 2
+      },
+      {
+        "ing": "sausage",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "nyura": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "egg",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "egg",
+        "count": 3
+      },
+      {
+        "ing": "soybean",
+        "count": 4
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "deribado": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 5
+      },
+      {
+        "ing": "apple",
+        "count": 6
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 7
+      },
+      {
+        "ing": "apple",
+        "count": 9
+      },
+      {
+        "ing": "cacao",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "derubiru": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "heruga": {
+    "slot1": [
+      {
+        "ing": "herb",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "herb",
+        "count": 2
+      },
+      {
+        "ing": "ginger",
+        "count": 3
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "herb",
+        "count": 4
+      },
+      {
+        "ing": "ginger",
+        "count": 4
+      },
+      {
+        "ing": "leek",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "hapinasu": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 5
+      },
+      {
+        "ing": "potato",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 7
+      },
+      {
+        "ing": "potato",
+        "count": 7
+      },
+      {
+        "ing": "honey",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "raikou": {
+    "slot1": [
+      {
+        "ing": "sausage",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "sausage",
+        "count": 2
+      },
+      {
+        "ing": "herb",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "sausage",
+        "count": 4
+      },
+      {
+        "ing": "herb",
+        "count": 3
+      },
+      {
+        "ing": "leek",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "entei": {
+    "slot1": [
+      {
+        "ing": "oil",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "oil",
+        "count": 2
+      },
+      {
+        "ing": "tomato",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "oil",
+        "count": 4
+      },
+      {
+        "ing": "tomato",
+        "count": 4
+      },
+      {
+        "ing": "mushroom",
+        "count": 3
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "suikun": {
+    "slot1": [
+      {
+        "ing": "apple",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "apple",
+        "count": 2
+      },
+      {
+        "ing": "oil",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "apple",
+        "count": 4
+      },
+      {
+        "ing": "oil",
+        "count": 3
+      },
+      {
+        "ing": "corn",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "yogirasu": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 5
+      },
+      {
+        "ing": "soybean",
+        "count": 5
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 7
+      },
+      {
+        "ing": "soybean",
+        "count": 8
+      },
+      {
+        "ing": "sausage",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "sanagirasu": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 5
+      },
+      {
+        "ing": "soybean",
+        "count": 5
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 7
+      },
+      {
+        "ing": "soybean",
+        "count": 8
+      },
+      {
+        "ing": "sausage",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "bangirasu": {
+    "slot1": [
+      {
+        "ing": "ginger",
+        "count": 2
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "ginger",
+        "count": 5
+      },
+      {
+        "ing": "soybean",
+        "count": 5
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "ginger",
+        "count": 7
+      },
+      {
+        "ing": "soybean",
+        "count": 8
+      },
+      {
+        "ing": "sausage",
+        "count": 8
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "kimori": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 2
+      },
+      {
+        "ing": "coffee",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 4
+      },
+      {
+        "ing": "coffee",
+        "count": 3
+      },
+      {
+        "ing": "leek",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "juputoru": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 2
+      },
+      {
+        "ing": "coffee",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 4
+      },
+      {
+        "ing": "coffee",
+        "count": 3
+      },
+      {
+        "ing": "leek",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "jukain": {
+    "slot1": [
+      {
+        "ing": "egg",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "egg",
+        "count": 2
+      },
+      {
+        "ing": "coffee",
+        "count": 2
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "egg",
+        "count": 4
+      },
+      {
+        "ing": "coffee",
+        "count": 3
+      },
+      {
+        "ing": "leek",
+        "count": 2
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "achamo": {
+    "slot1": [
+      {
+        "ing": "mushroom",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "mushroom",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "mushroom",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 6
+      },
+      {
+        "ing": "oil",
+        "count": 5
+      }
+    ],
+    "source": "https://wikiwiki.jp/poke_sleep/%E3%82%A2%E3%83%81%E3%83%A3%E3%83%A2",
+    "verified_against": "https://wikiwiki.jp/poke_sleep/%E3%82%A2%E3%83%81%E3%83%A3%E3%83%A2"
+  },
+  "wakashamo": {
+    "slot1": [
+      {
+        "ing": "mushroom",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "mushroom",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "mushroom",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 6
+      },
+      {
+        "ing": "oil",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  },
+  "bashamo": {
+    "slot1": [
+      {
+        "ing": "mushroom",
+        "count": 1
+      }
+    ],
+    "slot2": [
+      {
+        "ing": "mushroom",
+        "count": 2
+      },
+      {
+        "ing": "soybean",
+        "count": 4
+      }
+    ],
+    "slot3": [
+      {
+        "ing": "mushroom",
+        "count": 4
+      },
+      {
+        "ing": "soybean",
+        "count": 6
+      },
+      {
+        "ing": "oil",
+        "count": 5
+      }
+    ],
+    "source": "https://github.com/nerolis-lab/nerolis-lab/blob/master/common/src/types/pokemon/index.ts"
+  }
+}

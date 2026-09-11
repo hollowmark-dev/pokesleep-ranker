@@ -11,15 +11,21 @@ import {
   SPECIALTIES, SUBSKILLS, NATURES, MAIN_SKILLS, SUBSKILL_UNLOCK_LEVELS,
 } from '../data/gamedata.js';
 import { SPECIES } from '../data/species.js';
+import {
+  INGREDIENTS, SPECIES_INGREDIENTS, INGREDIENT_UNLOCK_LEVELS,
+} from '../data/ingredients.js';
 import { thumbnailCanvas } from '../ocr/image.js';
 import { isWarm } from '../ocr/engine.js';
-import { parseScreenshot } from '../ocr/layout.js';
+import { parseScreenshot, resolveIngredients } from '../ocr/layout.js';
 import { normalize, bestMatch } from '../ocr/fuzzy.js';
 
 const LOW_CONF = 0.8;                 // これ未満は「要確認」
 const DEFAULT_UNLOCK = (Array.isArray(SUBSKILL_UNLOCK_LEVELS) && SUBSKILL_UNLOCK_LEVELS.length === 5)
   ? SUBSKILL_UNLOCK_LEVELS.slice()
   : [10, 25, 50, 75, 100];
+const ING_UNLOCK = (Array.isArray(INGREDIENT_UNLOCK_LEVELS) && INGREDIENT_UNLOCK_LEVELS.length === 3)
+  ? INGREDIENT_UNLOCK_LEVELS.slice()
+  : [1, 30, 60];
 
 const on = (node, type, fn) => { node.addEventListener(type, fn); return node; };
 
@@ -41,6 +47,7 @@ function blankModel() {
     mainSkill: null, mainSkillLevel: null,
     subskills: [null, null, null, null, null],
     unlockLevels: DEFAULT_UNLOCK.slice(),
+    ingredients: [null, null, null],
     nature: null, nickname: '', note: '',
     conf: {},
   };
@@ -67,6 +74,7 @@ function fromFields(f) {
   while (m.subskills.length < 5) m.subskills.push(null);
   m.unlockLevels = (f.subskillUnlockLevels.value || DEFAULT_UNLOCK).slice(0, 5);
   while (m.unlockLevels.length < 5) m.unlockLevels.push(DEFAULT_UNLOCK[m.unlockLevels.length]);
+  m.ingredients = pad3(f.ingredients ? f.ingredients.value : null);
   m.nature = f.nature.value;
   m.conf = {
     specialty: f.specialty.conf,
@@ -83,7 +91,17 @@ function fromFields(f) {
     m.conf['subskill' + (i + 1)] = (f.subskills.conf || [])[i] || 0;
     m.conf['unlock' + (i + 1)] = (f.subskillUnlockLevels.conf || [])[i] || 0;
   }
+  for (let i = 0; i < 3; i++) {
+    m.conf['ingredient' + (i + 1)] = (f.ingredients ? (f.ingredients.conf || []) : [])[i] || 0;
+  }
   return m;
+}
+
+/** 食材3枠の配列を必ず3要素にそろえる */
+function pad3(list) {
+  const out = Array.isArray(list) ? list.slice(0, 3) : [];
+  while (out.length < 3) out.push(null);
+  return out.map((v) => (v && (v.ing || v.count != null) ? { ing: v.ing || null, count: v.count ?? null } : null));
 }
 
 /** 保存済みの個体をフォームの初期値に落とす（編集モード） */
@@ -106,6 +124,7 @@ function fromIndividual(ind) {
   m.unlockLevels = Array.isArray(ind.subskillUnlockLevels)
     ? ind.subskillUnlockLevels.slice(0, 5) : DEFAULT_UNLOCK.slice();
   while (m.unlockLevels.length < 5) m.unlockLevels.push(DEFAULT_UNLOCK[m.unlockLevels.length]);
+  m.ingredients = pad3(ind.ingredients);
   m.nature = ind.nature || null;
   m.nickname = ind.nickname || '';
   m.note = ind.note || '';
@@ -178,12 +197,36 @@ function field(labelText, control, conf) {
   const low = typeof conf === 'number' && conf > 0 && conf < LOW_CONF;
   const unread = typeof conf === 'number' && conf === 0;
   const label = el('label', {}, labelText);
-  if (low || unread) {
-    label.appendChild(el('span', { class: 'small', style: 'color:var(--danger);margin-left:6px' }, '要確認'));
-  }
-  const wrap = el('div', { class: 'field' + ((low || unread) ? ' low-conf' : '') }, label);
+  const wrap = el('div', { class: 'field' }, label);
   wrap.appendChild(control);
+  markLowConf(wrap, low || unread);
   return wrap;
+}
+
+/** field() が作った枠の「要確認」表示を出し入れする（食材構成は種族によって後から変わる） */
+function markLowConf(wrap, low) {
+  if (!wrap) return;
+  wrap.classList.toggle('low-conf', !!low);
+  const label = wrap.querySelector('label');
+  if (!label) return;
+  const warn = label.querySelector('.conf-warn');
+  if (low && !warn) {
+    label.appendChild(el('span', { class: 'small conf-warn', style: 'color:var(--danger);margin-left:6px' }, '要確認'));
+  } else if (!low && warn) {
+    warn.remove();
+  }
+}
+
+/** 種族の枠N（0起点）の食材候補。表に無ければ null */
+function ingCandidates(speciesId, slot) {
+  const t = (speciesId && SPECIES_INGREDIENTS) ? SPECIES_INGREDIENTS[speciesId] : null;
+  const pool = t ? t['slot' + (slot + 1)] : null;
+  return (Array.isArray(pool) && pool.length) ? pool : null;
+}
+
+function ingName(id) {
+  const x = (INGREDIENTS || []).find((y) => y.id === id);
+  return x ? x.name : String(id || '');
 }
 
 function numToNull(input) {
@@ -342,6 +385,111 @@ function renderForm(root, model, ctx) {
   }
   root.appendChild(subCard);
 
+  // ── 食材構成3枠 ──
+  // 食材アイコンは画像なのでOCRしない。個数バッジ（x1/x2/x4）だけ読み、
+  // 種族の候補表と突き合わせて絞る。一意に決まらない枠はここで選んでもらう。
+  const ingSels = [];
+  const ingCountInputs = [];
+  const ingRows = [];
+  const ingCard = el('div', { class: 'card' },
+    el('h3', { class: 'mt-0' }, '食材構成'),
+    el('p', { class: 'small muted mt-0' }, '個数はスクショから読み取ります。食材が絞れない枠は選んでください。'));
+  for (let i = 0; i < 3; i++) {
+    const sel = document.createElement('select');
+    sel.style.flex = '1 1 auto';
+    sel.style.minWidth = '0';
+    const cnt = numberInput(null, { min: 1, max: 20, placeholder: '個' });
+    cnt.classList.add('ing-count-input');
+    cnt.style.width = '5em';
+    ingSels.push(sel);
+    ingCountInputs.push(cnt);
+    const row = field(
+      '枠' + (i + 1) + '（Lv.' + ING_UNLOCK[i] + '）',
+      el('div', { class: 'inline-2', style: INLINE }, sel, el('span', { class: 'small muted' }, '×'), cnt),
+      model.conf['ingredient' + (i + 1)],
+    );
+    ingRows.push(row);
+    ingCard.appendChild(row);
+  }
+  root.appendChild(ingCard);
+
+  /** 枠 i の候補リストを今の種族で作り直す。表が無い種族は全食材から選ばせる */
+  function fillIngOptions(i, speciesId) {
+    const sel = ingSels[i];
+    const pool = ingCandidates(speciesId, i);
+    sel.textContent = '';
+    const blank = document.createElement('option');
+    blank.value = '';
+    blank.textContent = '—';
+    sel.appendChild(blank);
+    if (pool) {
+      for (const c of pool) {
+        const o = document.createElement('option');
+        o.value = c.ing;
+        o.textContent = ingName(c.ing) + ' ×' + c.count;
+        o.dataset.count = String(c.count);
+        sel.appendChild(o);
+      }
+    } else {
+      for (const ing of (INGREDIENTS || [])) {
+        const o = document.createElement('option');
+        o.value = ing.id;
+        o.textContent = ing.name;
+        sel.appendChild(o);
+      }
+    }
+  }
+
+  /** 候補に無い食材（表の更新前に保存した個体など）を落とさないよう option を足す */
+  function selectIng(i, ing) {
+    const sel = ingSels[i];
+    sel.value = ing || '';
+    if (ing && sel.value !== ing) {
+      const o = document.createElement('option');
+      o.value = ing;
+      o.textContent = ingName(ing);
+      sel.appendChild(o);
+      sel.value = ing;
+    }
+  }
+
+  function markIngRow(i) {
+    markLowConf(ingRows[i], !(ingSels[i].value && ingCountInputs[i].value.trim()));
+  }
+
+  let ingSpeciesId = speciesIdByName(speciesInput.value.trim());
+  for (let i = 0; i < 3; i++) {
+    fillIngOptions(i, ingSpeciesId);
+    const v = model.ingredients[i];
+    selectIng(i, v ? v.ing : null);
+    ingCountInputs[i].value = (v && v.count != null) ? String(v.count) : '';
+    on(ingSels[i], 'change', () => {
+      const o = ingSels[i].selectedOptions && ingSels[i].selectedOptions[0];
+      if (o && o.dataset && o.dataset.count) ingCountInputs[i].value = o.dataset.count;
+      markIngRow(i);
+    });
+    on(ingCountInputs[i], 'input', () => markIngRow(i));
+  }
+
+  /** 種族が変わったら候補を作り直す。個数は残したまま食材を引き直す */
+  function rebuildIngredients() {
+    const id = speciesIdByName(speciesInput.value.trim());
+    if (id === ingSpeciesId) return;
+    ingSpeciesId = id;
+    const counts = ingCountInputs.map((c) => numToNull(c));
+    const resolved = resolveIngredients(id, counts);
+    for (let i = 0; i < 3; i++) {
+      fillIngOptions(i, id);
+      const r = resolved[i];
+      selectIng(i, r ? r.ing : null);
+      const c = (r && r.count != null) ? r.count : counts[i];
+      ingCountInputs[i].value = c == null ? '' : String(c);
+      markIngRow(i);
+    }
+  }
+  on(speciesInput, 'input', rebuildIngredients);
+  on(speciesInput, 'change', rebuildIngredients);
+
   // ── せいかく・メモ ──
   const natureSel = select(NATURES, model.nature);
   const nickInput = textInput(model.nickname, { placeholder: '呼び名（任意）', maxLength: 30 });
@@ -416,6 +564,11 @@ function renderForm(root, model, ctx) {
       mainSkillLevel: numToNull(mainLvInput),
       subskills: subSels.map((s) => s.value || null),
       subskillUnlockLevels: unlockInputs.map((u, i) => numToNull(u) ?? DEFAULT_UNLOCK[i]),
+      ingredients: ingSels.map((s, i) => {
+        const ing = s.value || null;
+        const count = numToNull(ingCountInputs[i]);
+        return (ing == null && count == null) ? null : { ing, count };
+      }),
       nature: natureSel.value || null,
       nickname: nickInput.value.trim(),
       note: noteArea.value.trim(),
@@ -443,7 +596,8 @@ function renderForm(root, model, ctx) {
     judgeBtn.hidden = false;
   }
   for (const node of [specialtySel, speciesInput, levelInput, spInput, helpMinInput, helpSecInput,
-    carryInput, mainSel, mainLvInput, natureSel, ...subSels, ...unlockInputs]) {
+    carryInput, mainSel, mainLvInput, natureSel, ...subSels, ...unlockInputs,
+    ...ingSels, ...ingCountInputs]) {
     on(node, 'input', hideResult);
     on(node, 'change', hideResult);
   }
@@ -455,7 +609,13 @@ function renderForm(root, model, ctx) {
     try {
       const settings = await getSettings();
       const score = individualScore(m, settings);
-      const dist = await getDistribution(m.specialty, settings);
+      // 食材構成つきの分布（第3引数）に対応していない版でも動くようにする
+      let dist;
+      try {
+        dist = await getDistribution(m.specialty, settings, m.species);
+      } catch (_) {
+        dist = await getDistribution(m.specialty, settings);
+      }
       const topPct = dist.topPct(score);
       const saved = (await listIndividuals()).filter((x) => !editing || x.id !== editing.id);
       const sameType = saved.filter((x) => x.specialty === m.specialty);
@@ -500,6 +660,7 @@ function renderForm(root, model, ctx) {
       mainSkillLevel: m.mainSkillLevel,
       subskills: m.subskills,
       subskillUnlockLevels: m.subskillUnlockLevels,
+      ingredients: m.ingredients,
       nature: m.nature,
       nickname: m.nickname,
       note: m.note,
@@ -588,6 +749,9 @@ function buildOcrRecord(ctx, editing) {
       nature: f.nature.conf,
     };
     for (let i = 0; i < 5; i++) fieldConf['subskill' + (i + 1)] = (f.subskills.conf || [])[i] || 0;
+    for (let i = 0; i < 3; i++) {
+      fieldConf['ingredient' + (i + 1)] = (f.ingredients ? (f.ingredients.conf || []) : [])[i] || 0;
+    }
     return { rawText: ctx.rawText || f.rawText || '', fieldConf };
   }
   return editing && editing.ocr ? editing.ocr : null;

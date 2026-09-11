@@ -34,6 +34,7 @@ const PRECACHE_URLS = [
   './js/io.js',
   './js/data/gamedata.js',
   './js/data/species.js',
+  './js/data/ingredients.js',
   './js/data/defaults.js',
   './js/ocr/image.js',
   './js/ocr/engine.js',

@@ -4,9 +4,13 @@ import { el, toast, confirmModal, formatTopPct } from '../ui.js';
 import { navigate } from '../app.js';
 import { getIndividual, listIndividuals, deleteIndividual } from '../store.js';
 import { getSettings } from '../settings.js';
-import { individualScore, scoreBreakdown, natureScore, grade, rankAmong } from '../score/score.js';
+import {
+  individualScore, scoreBreakdown, natureScore, grade, rankAmong,
+  ingredientScore, ingredientPoints, ingredientCombos,
+} from '../score/score.js';
 import { getDistribution } from '../score/dist.js';
 import { SPECIALTIES, SUBSKILLS, NATURES, STATS, MAIN_SKILLS, SUBSKILL_UNLOCK_LEVELS, byId } from '../data/gamedata.js';
+import { INGREDIENT_UNLOCK_LEVELS } from '../data/ingredients.js';
 
 const SUBSKILL_BY_ID = byId(SUBSKILLS);
 const NATURE_BY_ID = byId(NATURES);
@@ -43,7 +47,7 @@ export async function render(container, { id } = {}) {
 
   let dist = null;
   try {
-    dist = await getDistribution(ind.specialty, settings);
+    dist = await getDistribution(ind.specialty, settings, ind.species || null);
   } catch (e) {
     dist = null;
   }
@@ -53,16 +57,48 @@ export async function render(container, { id } = {}) {
   const g = topPct != null ? grade(topPct, settings) : null;
 
   const breakdown = normalizeBreakdown(safeScoreBreakdown(ind, settings), ind, settings);
+  const comboRank = ingredientComboRank(ind, settings);
+  // 母集団に食材構成が含まれるのは「その種族の構成が分かっていて、かつ重みが0でない」ときだけ
+  const withIngredients = !!(comboRank && comboRank.total > 1 && breakdownHasIngredientWeight(ind, settings));
 
   container.replaceChildren(
     headerSection(ind),
-    headlineSection(g, topPct, rankInAll, total),
+    headlineSection(g, topPct, rankInAll, total, withIngredients),
     accumulatedRankSection(ind, allIndividuals, settings),
     breakdownSection(ind, breakdown, score),
+    ingredientSection(ind, breakdown, comboRank, settings),
     detailsSection(ind),
     actionsSection(ind),
     compareSection(ind, allIndividuals, settings)
   );
+}
+
+/** そのとくいタイプで食材構成を評価するか（ingredientWeights > 0）。 */
+function breakdownHasIngredientWeight(ind, settings) {
+  const w = Number(((settings && settings.ingredientWeights) || {})[ind.specialty] || 0);
+  return Number.isFinite(w) && w > 0;
+}
+
+/**
+ * この個体の食材構成が、その種族の全パターン中で何番目か。
+ * 同点は同順位（自分より厳密に高い数 + 1）。種族未登録なら null。
+ */
+function ingredientComboRank(ind, settings) {
+  let combos = null;
+  try {
+    combos = ind.species ? ingredientCombos(ind.species) : null;
+  } catch (e) {
+    combos = null;
+  }
+  if (!combos || combos.length === 0) return null;
+  const mine = ingredientPoints(ind, settings);
+  let higher = 0;
+  for (const c of combos) {
+    const p = ingredientPoints({ specialty: ind.specialty, ingredients: c }, settings);
+    if (p > mine + 1e-9) higher++;
+  }
+  const known = (ind.ingredients || []).some((e) => e && e.ing);
+  return { rank: higher + 1, total: combos.length, known };
 }
 
 function safeScoreBreakdown(ind, settings) {
@@ -77,16 +113,26 @@ function safeScoreBreakdown(ind, settings) {
 function normalizeBreakdown(raw, ind, settings) {
   let slots = [];
   let naturePoints = null;
+  let ingredients = [];
+  let ingredientBonus = 0;
+  let ingPoints = null;
+  let ingRaw = null;
   if (Array.isArray(raw)) {
     slots = raw;
   } else if (raw && typeof raw === 'object') {
     slots = raw.slots || raw.rows || raw.breakdown || [];
     naturePoints = typeof raw.naturePoints === 'number' ? raw.naturePoints : null;
+    ingredients = Array.isArray(raw.ingredients) ? raw.ingredients : [];
+    ingredientBonus = typeof raw.ingredientBonus === 'number' ? raw.ingredientBonus : 0;
+    ingPoints = typeof raw.ingredientPoints === 'number' ? raw.ingredientPoints : null;
+    ingRaw = typeof raw.ingredientScore === 'number' ? raw.ingredientScore : null;
   }
   if (naturePoints == null) {
     naturePoints = natureScore(ind.specialty, ind.nature, settings);
   }
-  return { slots, naturePoints };
+  if (ingPoints == null) ingPoints = ingredientPoints(ind, settings);
+  if (ingRaw == null) ingRaw = ingredientScore(ind, settings);
+  return { slots, naturePoints, ingredients, ingredientBonus, ingredientPoints: ingPoints, ingredientScore: ingRaw };
 }
 
 function formatPct(pct) {
@@ -138,7 +184,7 @@ function headerSection(ind) {
   return el('div', { class: 'card detail-header' }, ...children);
 }
 
-function headlineSection(g, topPct, rankInAll, total) {
+function headlineSection(g, topPct, rankInAll, total, withIngredients) {
   const badge = g
     ? el('div', { class: `grade-badge-lg grade-${g}` }, g)
     : el('div', { class: 'grade-badge-lg' }, '—');
@@ -153,7 +199,13 @@ function headlineSection(g, topPct, rankInAll, total) {
       { class: 'headline-rank' },
       rankInAll != null && total != null ? `${formatInt(rankInAll)}位 / 全 ${formatInt(total)} パターン` : '—'
     ),
-    el('div', { class: 'muted' }, '全組み合わせを均等とみなした順位')
+    el(
+      'div',
+      { class: 'muted' },
+      withIngredients
+        ? '全組み合わせ（サブスキル×せいかく×食材構成）を均等とみなした順位'
+        : '全組み合わせを均等とみなした順位'
+    )
   );
 }
 
@@ -190,8 +242,22 @@ function subskillCell(subskillId) {
   return el('span', { class: `chip ${rarityClass}`.trim() }, meta.name);
 }
 
+/** 得点は端数が出うる（食材の価値/100）ので、表示は整数に丸める。 */
+function formatPoints(n) {
+  const v = Number(n);
+  if (!Number.isFinite(v)) return '0';
+  return String(Math.round(v));
+}
+
+/** 食材の枠を「あんみんトマト ×2」の形にする。未確定は「—」。 */
+function ingredientCell(entry) {
+  if (!entry || !entry.ing) return el('span', { class: 'chip chip-white' }, '—');
+  const name = entry.ingName || entry.ing;
+  return el('span', { class: 'chip' }, `${name} ×${entry.count != null ? entry.count : '?'}`);
+}
+
 function breakdownSection(ind, breakdown, totalScore) {
-  const { slots, naturePoints } = breakdown;
+  const { slots, naturePoints, ingredients, ingredientBonus } = breakdown;
   const subskillIds = ind.subskills && ind.subskills.length === 5 ? ind.subskills : [null, null, null, null, null];
   const unlockLevels =
     ind.subskillUnlockLevels && ind.subskillUnlockLevels.length === 5
@@ -223,7 +289,7 @@ function breakdownSection(ind, breakdown, totalScore) {
         el('td', {}, `枠${slotNo}`),
         el('td', {}, unlockLevels[i] != null ? `Lv.${unlockLevels[i]}` : '—'),
         el('td', {}, subskillCell(subskillId)),
-        el('td', {}, String(points))
+        el('td', {}, formatPoints(points))
       )
     );
   }
@@ -236,9 +302,38 @@ function breakdownSection(ind, breakdown, totalScore) {
       el('td', {}, 'せいかく'),
       el('td', {}, ''),
       el('td', {}, natureMeta ? `${natureMeta.name}（${natureDesc(natureMeta)}）` : '—'),
-      el('td', {}, String(naturePoints))
+      el('td', {}, formatPoints(naturePoints))
     )
   );
+
+  // 食材構成（3枠＋揃いボーナス）。同じ表に続けて並べて合計が一目で合うようにする。
+  // 1枠も分かっていない個体では 0 点の行が並ぶだけなので省く。
+  const hasIngredients = (ingredients || []).some((e) => e && e.ing);
+  if (hasIngredients) (ingredients || []).forEach((entry, i) => {
+    const unlock = INGREDIENT_UNLOCK_LEVELS[i];
+    tbody.appendChild(
+      el(
+        'tr',
+        {},
+        el('td', {}, `食材枠${entry && entry.slot != null ? entry.slot : i + 1}`),
+        el('td', {}, unlock != null ? `Lv.${unlock}` : '—'),
+        el('td', {}, ingredientCell(entry)),
+        el('td', {}, formatPoints(entry && entry.points))
+      )
+    );
+  });
+  if (hasIngredients) {
+    tbody.appendChild(
+      el(
+        'tr',
+        {},
+        el('td', {}, '揃いボーナス'),
+        el('td', {}, ''),
+        el('td', {}, uniformityLabel(ingredients)),
+        el('td', {}, formatPoints(ingredientBonus))
+      )
+    );
+  }
 
   const table = el('table', { class: 'breakdown-table' }, thead, tbody);
 
@@ -247,8 +342,92 @@ function breakdownSection(ind, breakdown, totalScore) {
     { class: 'card' },
     el('h2', {}, '内訳'),
     table,
-    el('div', { class: 'breakdown-total' }, `合計スコア: ${formatInt(totalScore)}`)
+    el('div', { class: 'breakdown-total' }, `合計スコア: ${formatInt(Math.round(totalScore))}`)
   );
+}
+
+/** 揃い状況の説明文（3枠そろい／2枠そろい／なし）。 */
+function uniformityLabel(ingredients) {
+  const ids = (ingredients || []).map((e) => e && e.ing).filter(Boolean);
+  if (ids.length === 3 && ids[0] === ids[1] && ids[1] === ids[2]) return '3枠そろい';
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      if (ids[i] === ids[j]) return '2枠そろい';
+    }
+  }
+  return 'なし';
+}
+
+function ingredientSection(ind, breakdown, comboRank, settings) {
+  const { ingredients, ingredientBonus, ingredientPoints: ingPoints, ingredientScore: ingRaw } = breakdown;
+  const weighted = breakdownHasIngredientWeight(ind, settings);
+  const hasIngredients = (ingredients || []).some((e) => e && e.ing);
+
+  // きのみ・スキルで食材が1枠も分かっていないなら、0点の行を並べる意味がない
+  if (!weighted && !hasIngredients) {
+    return el(
+      'div',
+      { class: 'card' },
+      el('h2', {}, '食材構成'),
+      el('div', { class: 'muted' }, 'このとくいタイプでは食材構成をスコアに反映していません（重み0）。')
+    );
+  }
+
+  const rows = (ingredients || []).map((entry, i) =>
+    el(
+      'div',
+      { class: 'detail-row' },
+      el('span', { class: 'muted' }, `枠${entry && entry.slot != null ? entry.slot : i + 1}`),
+      el('span', {}, ingredientCell(entry), ' ', el('span', { class: 'muted' }, `${formatPoints(entry && entry.points)}点`))
+    )
+  );
+
+  rows.push(
+    el(
+      'div',
+      { class: 'detail-row' },
+      el('span', { class: 'muted' }, '揃いボーナス'),
+      el('span', {}, `${uniformityLabel(ingredients)} ／ ${formatPoints(ingredientBonus)}点`)
+    )
+  );
+
+  rows.push(
+    el(
+      'div',
+      { class: 'detail-row' },
+      el('span', { class: 'muted' }, '食材構成の得点'),
+      el('span', {}, `${formatPoints(ingPoints)}点（素点 ${formatPoints(ingRaw)}）`)
+    )
+  );
+
+  if (comboRank) {
+    rows.push(
+      el(
+        'div',
+        { class: 'detail-row' },
+        el('span', { class: 'muted' }, 'この種族の食材構成'),
+        el(
+          'span',
+          {},
+          comboRank.known
+            ? `全 ${formatInt(comboRank.total)} パターン中 ${formatInt(comboRank.rank)} 番目`
+            : `全 ${formatInt(comboRank.total)} パターン（この個体の構成は未確定）`
+        )
+      )
+    );
+  } else if (ind.species) {
+    rows.push(el('div', { class: 'muted' }, 'この種族の食材候補が未登録のため、パターン数は出せません。'));
+  } else {
+    rows.push(el('div', { class: 'muted' }, '種族未設定のため、パターン数は出せません。'));
+  }
+
+  if (!weighted) {
+    rows.push(
+      el('div', { class: 'muted' }, 'このとくいタイプでは食材構成をスコアに反映していません（重み0）。')
+    );
+  }
+
+  return el('div', { class: 'card' }, el('h2', {}, '食材構成'), ...rows);
 }
 
 function detailsSection(ind) {
@@ -335,7 +514,8 @@ function renderCompareRows(ind, rows, settings, distCache) {
       specialties.map(async (spec) => {
         if (distCache[spec]) return;
         try {
-          distCache[spec] = await getDistribution(spec, settings);
+          // 比較相手は同じ種族なので、食材構成も同じ母集団で見る
+          distCache[spec] = await getDistribution(spec, settings, ind.species || null);
         } catch (e) {
           distCache[spec] = null;
         }
