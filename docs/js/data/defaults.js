@@ -11,7 +11,7 @@ export const SETTINGS_SCHEMA_VERSION = 1;
 export const DEFAULT_SETTINGS = {
   key: 'current',
   schemaVersion: 1,
-  weightsVersion: '2026-09-12.3',
+  weightsVersion: '2026-09-12.4',
 
   // サブスキル枠1..5の重み。Ver.3.6.0（2026-06）で解放Lvが 10/25/50/70/80 になり
   // 5枠すべてが現実的に届くため、枠1〜3は同じ、枠4・5だけ少し下げる。
@@ -111,26 +111,27 @@ export const DEFAULT_SETTINGS = {
   // サブスキルと同じ 0..100 尺度（枠1のサブスキル1つ分と同じ倍率で加算される）。
   // 定説「〇〇M ＞ せいかく▲ ＞ 〇〇S」に合わせ、主力ステータスの▲は M と S の間に置く。
   // おてつだいスピードは ▲×1.11／▼×0.93 と非対称なので ▼ を軽くする。
-  // きのみタイプの「食材確率▼」は、きのみを拾う確率が上がるので加点（いじっぱりが最良になる根拠）。
+  // きのみタイプの「食材確率▼」は、きのみを拾う確率が上がるので加点（いじっぱりが最良になる根拠）。▲は同じ理由で減点。
+  // げんき回復量は「げんきオール等のヒーラーを常駐させる運用」を前提に軽く、EXPは育成が終われば消える損なので軽め。
   natureEffectWeights: {
     berry: {
-      up: { speed: 45, ing: 0, skill: 5, energy: 8, exp: 12 },
-      down: { speed: -30, ing: 8, skill: -5, energy: -15, exp: -15 },
+      up: { speed: 45, ing: -12, skill: 5, energy: 5, exp: 8 },
+      down: { speed: -30, ing: 12, skill: -5, energy: -6, exp: -10 },
     },
     ingredient: {
-      up: { speed: 45, ing: 68, skill: 4, energy: 8, exp: 12 },
-      down: { speed: -30, ing: -68, skill: -4, energy: -15, exp: -18 },
+      up: { speed: 45, ing: 68, skill: 4, energy: 5, exp: 8 },
+      down: { speed: -30, ing: -68, skill: -4, energy: -6, exp: -10 },
     },
     // スキルタイプの食材確率: 発動抽選には影響せず、食材おてつだいが増えるぶんきのみが減るだけなので
     // ▲は小さな減点、▼は小さな加点（しんちょうがスキル最良になる根拠）。
     skill: {
-      up: { speed: 40, ing: -4, skill: 68, energy: 8, exp: 12 },
-      down: { speed: -27, ing: 4, skill: -68, energy: -15, exp: -18 },
+      up: { speed: 40, ing: -8, skill: 68, energy: 5, exp: 8 },
+      down: { speed: -27, ing: 8, skill: -68, energy: -6, exp: -10 },
     },
     // オールは現状2匹とも性格固定（無補正）なので実質使われない。将来の追加に備えた予備値。
     all: {
-      up: { speed: 50, ing: 20, skill: 40, energy: 8, exp: 25 },
-      down: { speed: -33, ing: -15, skill: -35, energy: -15, exp: -25 },
+      up: { speed: 50, ing: 20, skill: 40, energy: 5, exp: 15 },
+      down: { speed: -33, ing: -15, skill: -35, energy: -6, exp: -15 },
     },
   },
 
