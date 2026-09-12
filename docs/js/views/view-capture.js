@@ -17,6 +17,7 @@ import {
 import { thumbnailCanvas } from '../ocr/image.js';
 import { isWarm } from '../ocr/engine.js';
 import { parseScreenshot, resolveIngredients } from '../ocr/layout.js';
+import { shareResultCard, saveResultCard } from '../share-card.js';
 import { normalize, bestMatch } from '../ocr/fuzzy.js';
 
 const LOW_CONF = 0.8;                 // これ未満は「要確認」
@@ -613,14 +614,43 @@ function renderForm(root, model, ctx) {
 
   // ── 操作 ──
   const judgeBtn = el('button', { class: 'btn btn-primary', type: 'button' }, '判定する');
-  const saveBtn = el('button', { class: 'btn btn-primary', type: 'button' }, '保存する');
-  saveBtn.hidden = true;
-  const retry = on(el('button', { class: 'btn', type: 'button' }, editing ? 'やめる' : '選び直す'), 'click', () => {
+  const retry = on(el('button', { class: 'btn', type: 'button' }, editing ? 'やめる' : '別のスクショを選ぶ'), 'click', () => {
     releaseImage(ctx);
     if (editing) navigate('#/mon/' + editing.id);
     else renderChooser(root);
   });
-  root.appendChild(el('div', { class: 'btn-row' }, judgeBtn, saveBtn, retry));
+  root.appendChild(el('div', { class: 'btn-row' }, judgeBtn, retry));
+
+  // 判定したら即アプリに保存する（保存し忘れ防止）。同じフォームで判定し直したときは同じ個体を上書きする
+  let savedId = editing ? editing.id : null;
+  let savedCreatedAt = editing && editing.createdAt ? editing.createdAt : null;
+  function buildIndividual(m) {
+    const now = Date.now();
+    if (!savedId) savedId = newId();
+    if (!savedCreatedAt) savedCreatedAt = now;
+    return {
+      id: savedId,
+      schemaVersion: 1,
+      species: m.species,
+      speciesName: m.speciesName,
+      specialty: m.specialty,
+      level: m.level,
+      sp: m.sp,
+      helpIntervalSec: m.helpIntervalSec,
+      carryLimit: m.carryLimit,
+      mainSkill: m.mainSkill,
+      mainSkillLevel: m.mainSkillLevel,
+      subskills: m.subskills,
+      subskillUnlockLevels: m.subskillUnlockLevels,
+      ingredients: m.ingredients,
+      nature: m.nature,
+      nickname: m.nickname,
+      note: m.note,
+      ocr: buildOcrRecord(ctx, editing),
+      createdAt: savedCreatedAt,
+      updatedAt: now,
+    };
+  }
 
   // ── フォームの値を読み出す ──
   function readModel() {
@@ -668,8 +698,8 @@ function renderForm(root, model, ctx) {
     if (resultCard.hidden) return;
     resultCard.hidden = true;
     resultCard.textContent = '';
-    saveBtn.hidden = true;
     judgeBtn.hidden = false;
+    judgeBtn.textContent = savedId ? '判定し直す' : '判定する';
   }
   for (const node of [specialtySel, speciesInput, levelInput, spInput, helpMinInput, helpSecInput,
     carryInput, mainSel, mainLvInput, natureSel, ...subSels, ...unlockInputs,
@@ -693,7 +723,7 @@ function renderForm(root, model, ctx) {
         dist = await getDistribution(m.specialty, settings);
       }
       const topPct = dist.topPct(score);
-      const saved = (await listIndividuals()).filter((x) => !editing || x.id !== editing.id);
+      const saved = (await listIndividuals()).filter((x) => x.id !== savedId);
       const sameType = saved.filter((x) => x.specialty === m.specialty);
       const sameSpecies = m.species ? sameType.filter((x) => x.species === m.species) : [];
       result = {
@@ -711,50 +741,44 @@ function renderForm(root, model, ctx) {
       toast('評価を計算できませんでした', 'error');
       return;
     }
+    // 結果を見せる前に保存しておく（戻ってしまっても残る）
+    let obj;
+    let settingsForCard;
+    try {
+      obj = buildIndividual(m);
+      await putIndividual(obj);
+      settingsForCard = await getSettings();
+    } catch (_) {
+      judgeBtn.disabled = false;
+      toast('保存に失敗しました', 'error');
+      return;
+    }
     judgeBtn.hidden = true;
     judgeBtn.disabled = false;
     await revealResult(resultCard, result);
-    saveBtn.hidden = false;
+    toast('アプリに保存しました');
+    resultCard.appendChild(resultActions(obj, settingsForCard));
   });
 
-  // ── 保存 ──
-  on(saveBtn, 'click', async () => {
-    const m = readModel();
-    if (!validate(m)) return;
-    const now = Date.now();
-    const obj = {
-      id: editing ? editing.id : newId(),
-      schemaVersion: 1,
-      species: m.species,
-      speciesName: m.speciesName,
-      specialty: m.specialty,
-      level: m.level,
-      sp: m.sp,
-      helpIntervalSec: m.helpIntervalSec,
-      carryLimit: m.carryLimit,
-      mainSkill: m.mainSkill,
-      mainSkillLevel: m.mainSkillLevel,
-      subskills: m.subskills,
-      subskillUnlockLevels: m.subskillUnlockLevels,
-      ingredients: m.ingredients,
-      nature: m.nature,
-      nickname: m.nickname,
-      note: m.note,
-      ocr: buildOcrRecord(ctx, editing),
-      createdAt: editing && editing.createdAt ? editing.createdAt : now,
-      updatedAt: now,
+  /** 結果カードの下に並べる操作: 画像で共有／画像を保存／詳細を見る */
+  function resultActions(obj, settings) {
+    const busyWrap = (btn, fn) => async () => {
+      btn.disabled = true;
+      const label = btn.textContent;
+      btn.textContent = '画像を作成中…';
+      try { await fn(); } finally { btn.textContent = label; btn.disabled = false; }
     };
-    saveBtn.disabled = true;
-    try {
-      await putIndividual(obj);
+    const shareBtn = el('button', { class: 'btn btn-primary', type: 'button' }, '画像で共有');
+    on(shareBtn, 'click', busyWrap(shareBtn, () => shareResultCard(obj, settings)));
+    const saveImgBtn = el('button', { class: 'btn', type: 'button' }, '画像を保存');
+    on(saveImgBtn, 'click', busyWrap(saveImgBtn, () => saveResultCard(obj, settings)));
+    const detailBtn = on(el('button', { class: 'btn', type: 'button' }, '詳細を見る'), 'click', () => {
       releaseImage(ctx);
-      toast('保存しました');
       navigate('#/mon/' + obj.id);
-    } catch (_) {
-      saveBtn.disabled = false;
-      toast('保存に失敗しました', 'error');
-    }
-  });
+    });
+    return el('div', { class: 'btn-row', style: 'margin-top:14px;justify-content:center' }, shareBtn, saveImgBtn, detailBtn);
+  }
+
 }
 
 /** 判定結果をルーレット風に見せる。reduced-motion のときは即表示 */
@@ -806,7 +830,7 @@ async function revealResult(card, r) {
   if (lines.length) {
     localEl.append(el('h4', {}, '蓄積内の順位'), ...lines.map((t) => el('div', {}, t)));
   } else {
-    localEl.append(el('div', { class: 'small muted' }, '保存すると、次からは手持ちの中での順位も出ます'));
+    localEl.append(el('div', { class: 'small muted' }, '手持ちが増えると、手持ちの中での順位も出ます'));
   }
 }
 

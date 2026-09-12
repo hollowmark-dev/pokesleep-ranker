@@ -9,7 +9,7 @@ import {
   ingredientScore, ingredientPoints, ingredientCombos,
 } from '../score/score.js';
 import { getDistribution } from '../score/dist.js';
-import { shareResultCard } from '../share-card.js';
+import { shareResultCard, saveResultCard } from '../share-card.js';
 import { SPECIALTIES, SUBSKILLS, NATURES, STATS, MAIN_SKILLS, SUBSKILL_UNLOCK_LEVELS, byId } from '../data/gamedata.js';
 import { INGREDIENT_UNLOCK_LEVELS } from '../data/ingredients.js';
 
@@ -477,6 +477,25 @@ function actionsSection(ind, settings) {
     },
     '画像で共有'
   );
+  const saveImgBtn = el(
+    'button',
+    {
+      class: 'btn',
+      type: 'button',
+      onclick: async () => {
+        saveImgBtn.disabled = true;
+        const label = saveImgBtn.textContent;
+        saveImgBtn.textContent = '画像を作成中…';
+        try {
+          await saveResultCard(ind, settings);
+        } finally {
+          saveImgBtn.textContent = label;
+          saveImgBtn.disabled = false;
+        }
+      },
+    },
+    '画像を保存'
+  );
   const editBtn = el(
     'button',
     { class: 'btn', type: 'button', onclick: () => navigate('#/edit/' + ind.id) },
@@ -501,7 +520,7 @@ function actionsSection(ind, settings) {
     },
     '削除'
   );
-  return el('div', { class: 'card action-row' }, shareBtn, editBtn, deleteBtn);
+  return el('div', { class: 'card action-row' }, shareBtn, saveImgBtn, editBtn, deleteBtn);
 }
 
 function compareSection(ind, allIndividuals, settings) {

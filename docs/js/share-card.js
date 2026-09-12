@@ -614,3 +614,30 @@ export async function shareResultCard(ind, settings) {
   toast('画像を保存しました');
   return { method: 'download' };
 }
+
+/**
+ * 判定結果カードを端末に保存する（常にダウンロード。共有シートは出さない）。
+ * 戻り値: { method: 'download'|'error' }
+ */
+export async function saveResultCard(ind, settings) {
+  let canvas;
+  try {
+    canvas = await renderResultCard(ind, settings);
+  } catch (e) {
+    toast('画像の作成に失敗しました', 'error');
+    return { method: 'error' };
+  }
+  const blob = await canvasToBlob(canvas);
+  if (!blob) {
+    toast('画像の作成に失敗しました', 'error');
+    return { method: 'error' };
+  }
+  try {
+    downloadBlob(blob, cardFilename(ind));
+  } catch (e) {
+    toast('画像の保存に失敗しました', 'error');
+    return { method: 'error' };
+  }
+  toast('画像を保存しました');
+  return { method: 'download' };
+}
