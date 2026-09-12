@@ -451,7 +451,6 @@ export async function render(container, params) {
     if (!admin) {
       return el('section', { class: 'card' },
         el('h3', {}, '管理者'),
-        el('p', { class: 'muted' }, '重みの調整は作者のみが行います。'),
         el('a', {
           href: '#', class: 'link small',
           onclick: async (ev) => {
