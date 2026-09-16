@@ -90,7 +90,7 @@ export const SPECIES = [
   { id: 'miniryu', name: 'ミニリュウ', specialty: 'ingredient', aliases: [] },
   { id: 'hakuryu', name: 'ハクリュー', specialty: 'ingredient', aliases: [] },
   { id: 'kairyu', name: 'カイリュー', specialty: 'ingredient', aliases: [] },
-  { id: 'myutsu', name: 'ミュウツー', specialty: 'berry', aliases: [] },
+  { id: 'myutsu', name: 'ミュウツー', specialty: 'skill', aliases: [] }, // 2026-09-14 実装。Wiki・Game8ともスキルとくい
   { id: 'myu', name: 'ミュウ', specialty: 'all', aliases: [] },
 
   // --- ジョウト ---
