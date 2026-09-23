@@ -7,6 +7,7 @@ import { $, el, toast } from './ui.js';
 import { registerServiceWorker, applyUpdate } from './update.js';
 import { hasOverride, onSettingsChange } from './settings.js';
 import { setErrorHandler as setStoreErrorHandler } from './store.js';
+import { checkWhatsNew } from './whatsnew.js';
 
 const ROUTES = [
   { pattern: /^#\/$/, view: './views/view-list.js', params: () => ({}) },
@@ -115,6 +116,7 @@ function setupServiceWorker() {
 window.addEventListener('hashchange', render);
 onSettingsChange(() => { renderBanner(); });
 
-render();
+// 最初の画面を出してから「アップデートしました」を確認する
+render().finally(() => { checkWhatsNew().catch(() => {}); });
 renderBanner();
 setupServiceWorker();

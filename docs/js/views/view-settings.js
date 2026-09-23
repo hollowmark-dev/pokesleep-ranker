@@ -1,5 +1,5 @@
 // 設定画面。評価ルール（重み）の閲覧、データの書き出し/読み込み、
-// 管理者モードでの重み編集と defaults.js 用JSONの書き出しを担当する。
+// 管理者モードでの重み編集と defaults.js 用JSONの書き出し、更新履歴の表示を担当する。
 
 import {
   getSettings, saveOverride, clearOverride, hasOverride,
@@ -9,6 +9,8 @@ import { el, toast, confirmModal, openModal } from '../ui.js';
 import { exportAll, importFile } from '../io.js';
 import { SUBSKILLS, STATS, SPECIALTIES } from '../data/gamedata.js';
 import { INGREDIENTS } from '../data/ingredients.js';
+import { CHANGELOG } from '../data/changelog.js';
+import { changelogEntryEl } from '../whatsnew.js';
 
 const RARITY_GROUPS = [
   { id: 'gold', label: '金', chip: 'chip-gold' },
@@ -321,6 +323,22 @@ export async function render(container, params) {
     return el('section', { class: 'card' }, ...parts);
   }
 
+  // 新しい2件は開いたまま、それより前は折りたたむ。お知らせの「すべて見る」から #changelog へ飛んでくる
+  function changelogSection() {
+    const list = Array.isArray(CHANGELOG) ? CHANGELOG : [];
+    const recent = list.slice(0, 2);
+    const older = list.slice(2);
+    return el('section', { class: 'card changelog', id: 'changelog' },
+      el('h3', {}, '更新履歴'),
+      recent.length ? recent.map(changelogEntryEl) : el('p', { class: 'muted small' }, 'まだありません。'),
+      older.length
+        ? el('details', { class: 'changelog-older' },
+          el('summary', { class: 'small' }, 'これより前の更新'),
+          older.map(changelogEntryEl))
+        : null
+    );
+  }
+
   function weightsSection() {
     return el('section', { class: 'card' },
       el('h3', {}, 'サブスキルの重み'),
@@ -577,6 +595,7 @@ export async function render(container, params) {
     container.append(
       el('div', { class: 'view view-settings' },
         headerSection(),
+        changelogSection(),
         weightsSection(),
         dataSection(),
         adminSection()

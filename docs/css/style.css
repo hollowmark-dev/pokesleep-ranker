@@ -432,6 +432,7 @@ button, input, select, textarea { font: inherit; }
 
 .modal .actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
   margin-top: 16px;
@@ -562,3 +563,25 @@ div.wtable > table tr:last-child td { border-bottom: none; }
 }
 
 .btn-small { padding: 6px 12px; font-size: 13px; }
+
+/* ── 更新履歴（設定画面のカードと「アップデートしました」のお知らせ） ── */
+
+.changelog-entry + .changelog-entry { margin-top: 12px; }
+.changelog-date { margin: 0 0 4px; font-weight: 700; }
+.changelog-items {
+  margin: 0;
+  padding-left: 1.3em;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.changelog-items li + li { margin-top: 2px; }
+.changelog-older { margin-top: 12px; }
+.changelog-older > summary { cursor: pointer; color: var(--muted); padding: 4px 0; }
+.changelog-older[open] > summary { margin-bottom: 8px; }
+.whatsnew-body {
+  max-height: 55vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#changelog { scroll-margin-top: 64px; } /* 上部の固定バーに隠れないように */
