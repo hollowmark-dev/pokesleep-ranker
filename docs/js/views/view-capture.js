@@ -1,7 +1,7 @@
 // スクショの読み取り → 確認フォーム → 判定（結果のお披露目）→ 保存。手入力と編集もこの画面で受ける。
 // OCRは必ず「確認フォーム」を挟む。確度の低い項目は赤枠＋「要確認」で目立たせる。
 
-import { el, toast, openBusy, openModal, formatTopPct } from '../ui.js';
+import { el, toast, openBusy, openModal, choiceModal, formatTopPct } from '../ui.js';
 import { navigate } from '../app.js';
 import { putIndividual, getIndividual, listIndividuals } from '../store.js';
 import { getSettings } from '../settings.js';
@@ -19,6 +19,7 @@ import { isWarm } from '../ocr/engine.js';
 import { parseScreenshot, resolveIngredients } from '../ocr/layout.js';
 import { shareResultCard, saveResultCard } from '../share-card.js';
 import { normalize, bestMatch } from '../ocr/fuzzy.js';
+import { findDuplicateCandidates } from '../dedupe.js';
 
 const LOW_CONF = 0.8;                 // これ未満は「要確認」
 const DEFAULT_UNLOCK = (Array.isArray(SUBSKILL_UNLOCK_LEVELS) && SUBSKILL_UNLOCK_LEVELS.length === 5)
@@ -228,6 +229,45 @@ function ingCandidates(speciesId, slot) {
 function ingName(id) {
   const x = (INGREDIENTS || []).find((y) => y.id === id);
   return x ? x.name : String(id || '');
+}
+
+/** ms を「M/D」に。読めなければ空文字 */
+function shortDate(ms) {
+  if (!Number.isFinite(ms)) return '';
+  const d = new Date(ms);
+  return (d.getMonth() + 1) + '/' + d.getDate();
+}
+
+/** 重複候補の説明（「この記録を更新」ボタンの中に出す） */
+function duplicateDetail(cand, m) {
+  const ind = cand.ind;
+  const lv = (v) => 'Lv.' + (v == null ? '—' : v);
+  const name = ind.speciesName || nameOfSpecies(ind.species) || '—';
+  const lines = [el('strong', {}, name + '　' + lv(ind.level) + ' → ' + lv(m.level))];
+  const sub = [];
+  if (ind.nickname) sub.push('「' + ind.nickname + '」');
+  const date = shortDate(ind.updatedAt || ind.createdAt);
+  if (date) sub.push(date + ' 保存');
+  if (sub.length) lines.push(el('span', { class: 'small' }, sub.join('　')));
+  if (cand.kind === 'near' && Array.isArray(cand.diffSlots) && cand.diffSlots.length) {
+    lines.push(el('span', { class: 'small muted' },
+      cand.diffSlots.map((i) => '枠' + (i + 1)).join('・') + 'のサブスキルが違います'));
+  }
+  return lines;
+}
+
+/** 前に登録した個体と同じかを尋ねる。候補 / 'new'（別の個体として保存）/ null（閉じた） */
+function askDuplicate(cands, m) {
+  return choiceModal({
+    title: '前に登録した個体と同じかもしれません',
+    choices: [
+      ...cands.map((c, i) => ({
+        label: 'この記録を更新', value: c, primary: i === 0, detail: duplicateDetail(c, m),
+      })),
+      { label: '別の個体として保存', value: 'new' },
+    ],
+    cancelLabel: 'キャンセル',
+  });
 }
 
 function numToNull(input) {
@@ -624,6 +664,7 @@ function renderForm(root, model, ctx) {
   // 判定したら即アプリに保存する（保存し忘れ防止）。同じフォームで判定し直したときは同じ個体を上書きする
   let savedId = editing ? editing.id : null;
   let savedCreatedAt = editing && editing.createdAt ? editing.createdAt : null;
+  let updatedExisting = false; // 重複確認で「この記録を更新」を選んだ
   function buildIndividual(m) {
     const now = Date.now();
     if (!savedId) savedId = newId();
@@ -711,6 +752,43 @@ function renderForm(root, model, ctx) {
     const m = readModel();
     if (!validate(m)) return;
     judgeBtn.disabled = true;
+    // 新規登録の最初の判定だけ、前に登録した個体（レベルアップ後の撮り直し等）と同じかを確認する。
+    // 蓄積内の順位から自分を除くため、保存済みリストを作るより前に決める
+    if (!editing && savedId == null) {
+      let cands = [];
+      try {
+        cands = findDuplicateCandidates(m, await listIndividuals()) || [];
+      } catch (_) {
+        cands = []; // 見つけられなくても判定は止めない（別の個体として保存）
+      }
+      if (cands.length) {
+        let choice = null;
+        try {
+          choice = await askDuplicate(cands, m);
+        } catch (_) {
+          choice = null;
+        }
+        if (choice == null) {
+          judgeBtn.disabled = false;
+          return;
+        }
+        if (choice !== 'new' && choice.ind) {
+          const old = choice.ind;
+          savedId = old.id;
+          savedCreatedAt = old.createdAt || null;
+          updatedExisting = true;
+          // 呼び名・メモが空なら前の記録のものを引き継ぐ（判定し直しで消えないようフォームにも戻す）
+          if (!m.nickname && old.nickname) {
+            m.nickname = old.nickname;
+            nickInput.value = old.nickname;
+          }
+          if (!m.note && old.note) {
+            m.note = old.note;
+            noteArea.value = old.note;
+          }
+        }
+      }
+    }
     let result;
     try {
       const settings = await getSettings();
@@ -756,7 +834,7 @@ function renderForm(root, model, ctx) {
     judgeBtn.hidden = true;
     judgeBtn.disabled = false;
     await revealResult(resultCard, result);
-    toast('アプリに保存しました');
+    toast(updatedExisting ? '前の記録を更新しました' : 'アプリに保存しました');
     resultCard.appendChild(resultActions(obj, settingsForCard));
   });
 

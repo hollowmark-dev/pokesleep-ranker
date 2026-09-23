@@ -437,6 +437,33 @@ button, input, select, textarea { font: inherit; }
   margin-top: 16px;
 }
 
+/* 選択肢モーダル（ui.js の choiceModal）: 縦に全幅で並べ、ボタン内に補足を出せる */
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.choice-btn {
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.choice-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  font-weight: 400;
+}
+
+.choice-btn .muted { color: inherit; opacity: 0.8; }
+
+.choice-label { text-align: center; }
+
 /* ── トースト ────────────────────────────────────── */
 
 #toast {

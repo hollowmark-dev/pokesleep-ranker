@@ -145,6 +145,59 @@ export function confirmModal(message) {
   });
 }
 
+/**
+ * 選択肢モーダル。choices: [{ label, value, primary?, detail? }] を縦に全幅で並べる。
+ * detail（文字列・要素・その配列）はボタン内のラベルの上に出す補足。
+ * 選んだ value で resolve。Esc・背景タップ・cancelLabel のボタンは null。
+ */
+export function choiceModal({ title = '', body = null, choices = [], cancelLabel = null } = {}) {
+  return new Promise((resolve) => {
+    let settled = false;
+    let modal = null;
+    const finish = (value) => {
+      if (settled) return;
+      settled = true;
+      resolve(value);
+      if (modal) modal.close();
+    };
+    const buttons = choices.map((c) => {
+      const detail = c.detail == null ? null : el('span', { class: 'choice-detail' }, c.detail);
+      const btn = el('button', { class: 'btn choice-btn' + (c.primary ? ' btn-primary' : ''), type: 'button' },
+        detail, el('span', { class: 'choice-label' }, c.label));
+      btn.addEventListener('click', () => finish(c.value));
+      return btn;
+    });
+    let cancelBtn = null;
+    if (cancelLabel) {
+      cancelBtn = el('button', { class: 'btn choice-btn', type: 'button' }, cancelLabel);
+      cancelBtn.addEventListener('click', () => finish(null));
+    }
+    let bodyEl = null;
+    if (body != null) bodyEl = body instanceof Node ? body : el('p', { class: 'small muted', text: String(body) });
+    const content = el(
+      'div',
+      {},
+      title ? el('h3', { text: title }) : null,
+      bodyEl,
+      el('div', { class: 'choice-list' }, buttons, cancelBtn)
+    );
+    modal = openModal(content);
+    // Escキー・背景タップで閉じた場合は null。背景は #modal-root の子なので、実際の親を見張る
+    const box = content.parentElement;
+    const bg = box ? box.parentElement : null;
+    const host = bg ? bg.parentNode : null;
+    if (host) {
+      const observer = new MutationObserver(() => {
+        if (!bg.isConnected) {
+          observer.disconnect();
+          finish(null);
+        }
+      });
+      observer.observe(host, { childList: true });
+    }
+  });
+}
+
 // 上位%の表示: 1%未満は小数を増やして 0.0% に潰れないようにする
 export function formatTopPct(pct) {
   if (pct == null || !Number.isFinite(pct)) return '—';
