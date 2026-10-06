@@ -4,8 +4,8 @@
 // 【注意・保留事項】
 // - id はローマ字 snake_case。長音「ー」は落とす方針（例: リザード→rizado、ゲンガー→genga）。
 //   パモット(pamotto) と パーモット(paamotto) だけは衝突を避けるため長音を aa で残している。
-// - ミュウツー（きのみ）は 2026-09-14 開始のイベント「秘境リサーチ！ミュウツーをおいかけて」で
-//   入手可能になる予定。作成時点では未実装だが、とくい＝きのみが複数ソースで確定しているため収録した。
+// - ミュウツーは 2026-09-14 実装。とくいはスキル（初版では「きのみ」と誤っていた。2026-09-16 修正）。
+// - タマゲタケ・モロバレルは 2026-10-05 実装（食材とくい）。
 // - ピカチュウのハロウィン衣装は年次で複数バリエーション（オレンジ／パープル）があるが、
 //   いずれも とくい＝きのみ のため 1エントリにまとめ、別表記を aliases に入れてある。
 // - 以下はソースにより記載が割れる／確認できなかったため収録していない:
@@ -221,6 +221,8 @@ export const SPECIES = [
   { id: 'mushana', name: 'ムシャーナ', specialty: 'berry', aliases: [] },
   { id: 'ishizumai', name: 'イシズマイ', specialty: 'skill', aliases: [] },
   { id: 'iwaparesu', name: 'イワパレス', specialty: 'skill', aliases: [] },
+  { id: 'tamagetake', name: 'タマゲタケ', specialty: 'ingredient', aliases: [] },
+  { id: 'morobareru', name: 'モロバレル', specialty: 'ingredient', aliases: [] },
   { id: 'washibon', name: 'ワシボン', specialty: 'skill', aliases: [] },
   { id: 'woguru', name: 'ウォーグル', specialty: 'skill', aliases: [] },
 

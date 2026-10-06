@@ -225,6 +225,9 @@ export const SPECIES_INGREDIENTS = {
   mushana: { slot1: [{ ing: 'milk', count: 1 }], slot2: [{ ing: 'milk', count: 2 }, { ing: 'honey', count: 2 }], slot3: [{ ing: 'milk', count: 4 }, { ing: 'honey', count: 3 }, { ing: 'coffee', count: 2 }] },
   ishizumai: { slot1: [{ ing: 'avocado', count: 1 }], slot2: [{ ing: 'avocado', count: 2 }, { ing: 'potato', count: 3 }], slot3: [{ ing: 'avocado', count: 4 }, { ing: 'potato', count: 5 }, { ing: 'oil', count: 5 }] },
   iwaparesu: { slot1: [{ ing: 'avocado', count: 1 }], slot2: [{ ing: 'avocado', count: 2 }, { ing: 'potato', count: 3 }], slot3: [{ ing: 'avocado', count: 4 }, { ing: 'potato', count: 5 }, { ing: 'oil', count: 5 }] },
+  // タマゲタケ／モロバレル（2026-10-05 実装、食材とくい）: Wiki・Game8・Serebii の食材欄と個数の法則（キノコ2 → 2.25倍/3.6倍）で一致
+  tamagetake: { slot1: [{ ing: 'mushroom', count: 2 }], slot2: [{ ing: 'mushroom', count: 5 }, { ing: 'egg', count: 7 }], slot3: [{ ing: 'mushroom', count: 7 }, { ing: 'egg', count: 10 }, { ing: 'tomato', count: 11 }] },
+  morobareru: { slot1: [{ ing: 'mushroom', count: 2 }], slot2: [{ ing: 'mushroom', count: 5 }, { ing: 'egg', count: 7 }], slot3: [{ ing: 'mushroom', count: 7 }, { ing: 'egg', count: 10 }, { ing: 'tomato', count: 11 }] },
   washibon: { slot1: [{ ing: 'sausage', count: 1 }], slot2: [{ ing: 'sausage', count: 2 }, { ing: 'corn', count: 2 }], slot3: [{ ing: 'sausage', count: 4 }, { ing: 'corn', count: 3 }, { ing: 'coffee', count: 2 }] },
   woguru: { slot1: [{ ing: 'sausage', count: 1 }], slot2: [{ ing: 'sausage', count: 2 }, { ing: 'corn', count: 2 }], slot3: [{ ing: 'sausage', count: 4 }, { ing: 'corn', count: 3 }, { ing: 'coffee', count: 2 }] },
   chigorasu: { slot1: [{ ing: 'sausage', count: 1 }], slot2: [{ ing: 'sausage', count: 2 }, { ing: 'apple', count: 3 }], slot3: [{ ing: 'sausage', count: 4 }, { ing: 'apple', count: 4 }, { ing: 'potato', count: 3 }] },

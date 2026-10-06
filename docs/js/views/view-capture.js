@@ -591,6 +591,12 @@ function renderForm(root, model, ctx) {
     const id = speciesIdByName(speciesInput.value.trim());
     if (id === ingSpeciesId) return;
     ingSpeciesId = id;
+    // とくいタイプは種族で決まるので、種族を直したら合わせる（読み違いを直したのにタイプが前のまま、を防ぐ）
+    const sp = id ? SPECIES.find((s) => s.id === id) : null;
+    if (sp && sp.specialty && specialtySel.value !== sp.specialty) {
+      specialtySel.value = sp.specialty;
+      specialtySel.dispatchEvent(new Event('change', { bubbles: true }));
+    }
     const counts = ingCountInputs.map((c) => numToNull(c));
     const resolved = resolveIngredients(id, counts);
     for (let i = 0; i < 3; i++) {

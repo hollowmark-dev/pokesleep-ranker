@@ -81,11 +81,11 @@ SPEC.md の方針どおり、**OCRで実際に読めた解放レベルがあれ�
 
 ---
 
-## 5. ポケモン一覧（`SPECIES`）— 247件
+## 5. ポケモン一覧（`SPECIES`）— 249件
 
 | 項目 | 結果 |
 |---|---|
-| 件数 | 247件（きのみ73 / 食材85 / スキル87 / オール2） |
+| 件数 | 249件（きのみ72 / 食材87 / スキル88 / オール2）※2026-10-06 時点 |
 | 主出典 | ポケモンスリープ個体値チェッカー「ポケモン一覧表」 <https://www.pokemonsleepdaifuku.com/ポケモン一覧表/> |
 | 突き合わせ | Serebii "List of Pokémon in Pokémon Sleep" <https://www.serebii.net/pokemonsleep/pokemon.shtml><br>ポケらく「登場ポケモン一覧」 <https://pokemongo-raku.com/post72362><br>Game8「登場ポケモン一覧」 <https://game8.jp/pokemonsleep/541807> |
 
@@ -141,3 +141,15 @@ SPEC.md の方針どおり、**OCRで実際に読めた解放レベルがあれ�
   Game8（https://game8.jp/pokemonsleep/803685 ）の食材欄と、個数の法則（枠1食材のエナジー × 2.25／3.6 ÷ その食材のエナジー）で導出。
   Wiki（https://wikiwiki.jp/poke_sleep/ミュウツー ）が載せる「大豆1／コーン2／ポテト3」はこの組み合わせに含まれる。
 - メインスキル「サイコブレイク(きのみゾーン)」は登録済み。性格は固定（無補正）。
+
+## 2026-10-06 追記: タマゲタケ・モロバレル
+
+- 2026-10-05 15:00 実装（イベント「デカ盛り！料理ウィーク vol.3」と同時）。通常の野生出現で、せいかく固定ではない。
+  Wiki「ポケモンの一覧」（249件）と species.js を突き合わせ、不足はこの2匹だけだった。
+- **とくいは食材**、メインスキルは「エナジーチャージS」（既存）。Wiki・Game8・Serebii で一致。
+- 食材: 枠1 あじわいキノコ×2／枠2 キノコ×5・とくせんエッグ×7／枠3 キノコ×7・エッグ×10・あんみんトマト×11。
+  食材欄は3ソースで一致し、個数も法則（キノコ167×2 × 2.25／3.6 ÷ その食材のエナジー）と Wiki・Game8 の表示が一致。
+  キノコ枠2は 4.5 なので四捨五入で 5（Python の round だと 4 になるので注意）。
+- 出典: https://wikiwiki.jp/poke_sleep/タマゲタケ 、 https://wikiwiki.jp/poke_sleep/モロバレル 、
+  https://game8.jp/pokemonsleep/818870 、 https://game8.jp/pokemonsleep/818882 、
+  https://serebii.net/pokemonsleep/pokemon/foongus.shtml 、 https://serebii.net/pokemonsleep/pokemon/amoonguss.shtml
