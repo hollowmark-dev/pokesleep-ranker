@@ -81,11 +81,11 @@ SPEC.md の方針どおり、**OCRで実際に読めた解放レベルがあれ�
 
 ---
 
-## 5. ポケモン一覧（`SPECIES`）— 249件
+## 5. ポケモン一覧（`SPECIES`）— 251件
 
 | 項目 | 結果 |
 |---|---|
-| 件数 | 249件（きのみ72 / 食材87 / スキル88 / オール2）※2026-10-06 時点 |
+| 件数 | 251件（きのみ72 / 食材87 / スキル90 / オール2）※2026-11-13 時点 |
 | 主出典 | ポケモンスリープ個体値チェッカー「ポケモン一覧表」 <https://www.pokemonsleepdaifuku.com/ポケモン一覧表/> |
 | 突き合わせ | Serebii "List of Pokémon in Pokémon Sleep" <https://www.serebii.net/pokemonsleep/pokemon.shtml><br>ポケらく「登場ポケモン一覧」 <https://pokemongo-raku.com/post72362><br>Game8「登場ポケモン一覧」 <https://game8.jp/pokemonsleep/541807> |
 
@@ -153,3 +153,16 @@ SPEC.md の方針どおり、**OCRで実際に読めた解放レベルがあれ�
 - 出典: https://wikiwiki.jp/poke_sleep/タマゲタケ 、 https://wikiwiki.jp/poke_sleep/モロバレル 、
   https://game8.jp/pokemonsleep/818870 、 https://game8.jp/pokemonsleep/818882 、
   https://serebii.net/pokemonsleep/pokemon/foongus.shtml 、 https://serebii.net/pokemonsleep/pokemon/amoonguss.shtml
+
+## 2026-11-13 追記: ムウマ・ムウマージ
+
+- 2026-10-26 実装（イベント「ハロウィン2026：ダブルアメリサーチ」と同時、Ver.3.9.0）。通常の野生出現で、せいかく固定ではない。
+  Wiki「ポケモンの一覧」（2026-11-12 更新）と species.js を突き合わせ、不足はこの2匹だけだった。
+  イーブイ（ハロウィン2026）は既存の「イーブイ(ハロウィン)」行の見た目違いなので追加していない。
+- **とくいはスキル**。メインスキルはムウマが「料理パワーアップS」（既存）、ムウマージが新規の「マジカルフレイム(料理アドバンスS)」。
+- 食材: 枠1 ほっこりポテト×1／枠2 ポテト×2・めざましコーヒー×2／枠3 ポテト×4・コーヒー×3・あんみんトマト×4。
+  食材欄は Wiki・Serebii・ぽけらくで一致し、個数も法則（ポテト124 × 2.25／3.6 ÷ その食材のエナジー）と Wiki の表示が一致。
+- 新食材「ひとくちナッツ」は 2026-11-16 実装予定。基礎エナジーと拾うポケモンが未判明なので、まだ INGREDIENTS に入れていない。
+- 出典: https://wikiwiki.jp/poke_sleep/ムウマ 、 https://wikiwiki.jp/poke_sleep/ムウマージ 、
+  https://serebii.net/pokemonsleep/pokemon/mismagius.shtml 、 https://serebii.net/pokemonsleep/events/halloween2026.shtml 、
+  https://pokemongo-raku.com/?p=164707

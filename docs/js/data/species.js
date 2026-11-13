@@ -6,6 +6,7 @@
 //   パモット(pamotto) と パーモット(paamotto) だけは衝突を避けるため長音を aa で残している。
 // - ミュウツーは 2026-09-14 実装。とくいはスキル（初版では「きのみ」と誤っていた。2026-09-16 修正）。
 // - タマゲタケ・モロバレルは 2026-10-05 実装（食材とくい）。
+// - ムウマ・ムウマージは 2026-10-26 実装（スキルとくい）。
 // - ピカチュウのハロウィン衣装は年次で複数バリエーション（オレンジ／パープル）があるが、
 //   いずれも とくい＝きのみ のため 1エントリにまとめ、別表記を aliases に入れてある。
 // - 以下はソースにより記載が割れる／確認できなかったため収録していない:
@@ -121,6 +122,7 @@ export const SPECIES = [
   { id: 'burakki', name: 'ブラッキー', specialty: 'skill', aliases: [] },
   { id: 'yamikarasu', name: 'ヤミカラス', specialty: 'skill', aliases: [] },
   { id: 'yadoking', name: 'ヤドキング', specialty: 'skill', aliases: [] },
+  { id: 'muuma', name: 'ムウマ', specialty: 'skill', aliases: [] },
   { id: 'sonansu', name: 'ソーナンス', specialty: 'skill', aliases: [] },
   { id: 'haganeru', name: 'ハガネール', specialty: 'berry', aliases: [] },
   { id: 'tsubotsubo', name: 'ツボツボ', specialty: 'skill', aliases: [] },
@@ -196,6 +198,7 @@ export const SPECIES = [
   { id: 'rentora', name: 'レントラー', specialty: 'ingredient', aliases: [] },
   { id: 'fuwante', name: 'フワンテ', specialty: 'skill', aliases: [] },
   { id: 'fuwaraido', name: 'フワライド', specialty: 'skill', aliases: [] },
+  { id: 'muumaji', name: 'ムウマージ', specialty: 'skill', aliases: [] },
   { id: 'donkarasu', name: 'ドンカラス', specialty: 'skill', aliases: [] },
   { id: 'usohachi', name: 'ウソハチ', specialty: 'skill', aliases: [] },
   { id: 'manene', name: 'マネネ', specialty: 'ingredient', aliases: [] },

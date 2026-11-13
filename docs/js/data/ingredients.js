@@ -131,6 +131,8 @@ export const SPECIES_INGREDIENTS = {
   burakki: { slot1: [{ ing: 'milk', count: 1 }], slot2: [{ ing: 'milk', count: 2 }, { ing: 'cacao', count: 1 }], slot3: [{ ing: 'milk', count: 4 }, { ing: 'cacao', count: 2 }, { ing: 'sausage', count: 3 }] },
   yamikarasu: { slot1: [{ ing: 'coffee', count: 1 }], slot2: [{ ing: 'coffee', count: 2 }, { ing: 'soybean', count: 3 }], slot3: [{ ing: 'coffee', count: 4 }, { ing: 'soybean', count: 6 }, { ing: 'herb', count: 4 }] },
   yadoking: { slot1: [{ ing: 'cacao', count: 1 }], slot2: [{ ing: 'cacao', count: 2 }, { ing: 'tail', count: 1 }], slot3: [{ ing: 'cacao', count: 4 }, { ing: 'tail', count: 2 }, { ing: 'tomato', count: 5 }] },
+  // ムウマ／ムウマージ（2026-10-26 実装、スキルとくい）: Wiki・Serebii・ぽけらくの食材欄と個数の法則（ポテト1 → 2.25倍/3.6倍）で一致
+  muuma: { slot1: [{ ing: 'potato', count: 1 }], slot2: [{ ing: 'potato', count: 2 }, { ing: 'coffee', count: 2 }], slot3: [{ ing: 'potato', count: 4 }, { ing: 'coffee', count: 3 }, { ing: 'tomato', count: 4 }] },
   sonansu: { slot1: [{ ing: 'apple', count: 1 }], slot2: [{ ing: 'apple', count: 2 }, { ing: 'mushroom', count: 1 }], slot3: [{ ing: 'apple', count: 4 }, { ing: 'mushroom', count: 2 }, { ing: 'oil', count: 3 }] },
   haganeru: { slot1: [{ ing: 'tomato', count: 1 }], slot2: [{ ing: 'tomato', count: 2 }, { ing: 'sausage', count: 2 }], slot3: [{ ing: 'tomato', count: 4 }, { ing: 'sausage', count: 4 }, { ing: 'potato', count: 3 }] },
   tsubotsubo: { slot1: [{ ing: 'oil', count: 1 }], slot2: [{ ing: 'oil', count: 2 }, { ing: 'coffee', count: 2 }], slot3: [{ ing: 'oil', count: 4 }, { ing: 'coffee', count: 3 }, { ing: 'honey', count: 4 }] },
@@ -202,6 +204,7 @@ export const SPECIES_INGREDIENTS = {
   rentora: { slot1: [{ ing: 'tomato', count: 2 }], slot2: [{ ing: 'tomato', count: 5 }, { ing: 'oil', count: 4 }], slot3: [{ ing: 'tomato', count: 7 }, { ing: 'oil', count: 7 }, { ing: 'coffee', count: 5 }] },
   fuwante: { slot1: [{ ing: 'corn', count: 1 }], slot2: [{ ing: 'corn', count: 2 }, { ing: 'oil', count: 3 }], slot3: [{ ing: 'corn', count: 4 }, { ing: 'oil', count: 4 }, { ing: 'potato', count: 4 }] },
   fuwaraido: { slot1: [{ ing: 'corn', count: 1 }], slot2: [{ ing: 'corn', count: 2 }, { ing: 'oil', count: 3 }], slot3: [{ ing: 'corn', count: 4 }, { ing: 'oil', count: 4 }, { ing: 'potato', count: 4 }] },
+  muumaji: { slot1: [{ ing: 'potato', count: 1 }], slot2: [{ ing: 'potato', count: 2 }, { ing: 'coffee', count: 2 }], slot3: [{ ing: 'potato', count: 4 }, { ing: 'coffee', count: 3 }, { ing: 'tomato', count: 4 }] },
   donkarasu: { slot1: [{ ing: 'coffee', count: 1 }], slot2: [{ ing: 'coffee', count: 2 }, { ing: 'soybean', count: 3 }], slot3: [{ ing: 'coffee', count: 4 }, { ing: 'soybean', count: 6 }, { ing: 'herb', count: 4 }] },
   usohachi: { slot1: [{ ing: 'tomato', count: 1 }], slot2: [{ ing: 'tomato', count: 2 }, { ing: 'soybean', count: 2 }], slot3: [{ ing: 'tomato', count: 4 }, { ing: 'soybean', count: 4 }, { ing: 'mushroom', count: 2 }] },
   manene: { slot1: [{ ing: 'tomato', count: 2 }], slot2: [{ ing: 'tomato', count: 5 }, { ing: 'potato', count: 4 }], slot3: [{ ing: 'tomato', count: 7 }, { ing: 'potato', count: 6 }, { ing: 'leek', count: 4 }] },

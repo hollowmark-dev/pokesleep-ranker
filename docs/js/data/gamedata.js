@@ -111,6 +111,9 @@ export const MAIN_SKILLS = [
   { id: 'cooking_assist_s', name: '料理アシストS', base: null, aliases: ['料理アシストS', '料理アシストＳ'] },
   { id: 'build_up', name: 'ビルドアップ', base: 'cooking_assist_s', aliases: ['ビルドアップ', 'ビルドアップ(料理アシストS)'] },
   { id: 'minus', name: 'マイナス', base: 'cooking_power_up_s', aliases: ['マイナス', 'マイナス(料理パワーアップS)'] },
+  // 2026-10-26 ムウマージで追加。料理パワーアップSと同量のなべ容量に、大成功率の小アップが付く
+  { id: 'cooking_advance_s', name: '料理アドバンスS', base: null, aliases: ['料理アドバンスS', '料理アドバンスＳ'] },
+  { id: 'magical_flame', name: 'マジカルフレイム', base: 'cooking_advance_s', aliases: ['マジカルフレイム', 'マジカルフレイム(料理アドバンスS)'] },
 
   { id: 'ing_get_s', name: '食材ゲットS', base: null, aliases: ['食材ゲットS', '食材ゲットＳ'] },
   { id: 'ing_select_s', name: '食材セレクトS', base: null, aliases: ['食材セレクトS', '食材セレクトＳ'] },
