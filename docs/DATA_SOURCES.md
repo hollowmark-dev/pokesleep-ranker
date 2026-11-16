@@ -81,11 +81,11 @@ SPEC.md の方針どおり、**OCRで実際に読めた解放レベルがあれ�
 
 ---
 
-## 5. ポケモン一覧（`SPECIES`）— 251件
+## 5. ポケモン一覧（`SPECIES`）— 253件
 
 | 項目 | 結果 |
 |---|---|
-| 件数 | 251件（きのみ72 / 食材87 / スキル90 / オール2）※2026-11-13 時点 |
+| 件数 | 253件（きのみ72 / 食材89 / スキル90 / オール2）※2026-11-16 時点 |
 | 主出典 | ポケモンスリープ個体値チェッカー「ポケモン一覧表」 <https://www.pokemonsleepdaifuku.com/ポケモン一覧表/> |
 | 突き合わせ | Serebii "List of Pokémon in Pokémon Sleep" <https://www.serebii.net/pokemonsleep/pokemon.shtml><br>ポケらく「登場ポケモン一覧」 <https://pokemongo-raku.com/post72362><br>Game8「登場ポケモン一覧」 <https://game8.jp/pokemonsleep/541807> |
 
@@ -162,7 +162,21 @@ SPEC.md の方針どおり、**OCRで実際に読めた解放レベルがあれ�
 - **とくいはスキル**。メインスキルはムウマが「料理パワーアップS」（既存）、ムウマージが新規の「マジカルフレイム(料理アドバンスS)」。
 - 食材: 枠1 ほっこりポテト×1／枠2 ポテト×2・めざましコーヒー×2／枠3 ポテト×4・コーヒー×3・あんみんトマト×4。
   食材欄は Wiki・Serebii・ぽけらくで一致し、個数も法則（ポテト124 × 2.25／3.6 ÷ その食材のエナジー）と Wiki の表示が一致。
-- 新食材「ひとくちナッツ」は 2026-11-16 実装予定。基礎エナジーと拾うポケモンが未判明なので、まだ INGREDIENTS に入れていない。
+- 新食材「ひとくちナッツ」は 2026-11-16 実装予定（同日に登録済み。下の追記を参照）。
 - 出典: https://wikiwiki.jp/poke_sleep/ムウマ 、 https://wikiwiki.jp/poke_sleep/ムウマージ 、
   https://serebii.net/pokemonsleep/pokemon/mismagius.shtml 、 https://serebii.net/pokemonsleep/events/halloween2026.shtml 、
   https://pokemongo-raku.com/?p=164707
+
+## 2026-11-16 追記: モンメン・エルフーン、ひとくちナッツ
+
+- 2026-11-16 15:00 実装（イベント「なんでもペロリ！ごちそうウィーク vol.1」と同時）。通常の野生出現で、せいかく固定ではない。
+  Wiki「ポケモンの一覧」（2026-11-12 更新）にはまだ載っていなかったので、ポケらく・Serebii・Game8 で確認した。
+- **とくいは食材**、メインスキルは「げんきチャージS」（既存）。3ソースで一致。
+- 新食材 **ひとくちナッツ**: 基礎エナジー 112（Serebii・ポケらくで一致）。拾うのは今のところモンメン・エルフーンだけ。
+  既存種の食材候補に追加された形跡はない。対応レシピは3つ（タネばくだんナンカレー／くさむすびサラダラップ／おいしいシッポロールケーキ）。
+- 食材: 枠1 ナッツ×2／枠2 ナッツ×5・つやつやアボカド×3／枠3 ナッツ×7・アボカド×5・あんみんトマト×7。
+  個数は法則（ナッツ112×2 × 2.25／3.6 ÷ その食材のエナジー）で計算し、ポケらく・Game8 の表示と一致。
+- 汎用価値（ingredientValues）は nut: 40 とした（weightsVersion 2026-11-16.1）。理由は docs/WEIGHTS.md。
+- 出典: https://pokemongo-raku.com/post165865 、 https://pokemongo-raku.com/post166323 、 https://pokemongo-raku.com/post166325 、
+  https://www.serebii.net/pokemonsleep/pokemon/cottonee.shtml 、 https://www.serebii.net/pokemonsleep/pokemon/whimsicott.shtml 、
+  https://www.serebii.net/pokemonsleep/ingredients.shtml 、 https://game8.jp/pokemonsleep/840161

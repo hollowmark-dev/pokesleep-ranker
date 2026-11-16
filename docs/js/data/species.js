@@ -7,6 +7,7 @@
 // - ミュウツーは 2026-09-14 実装。とくいはスキル（初版では「きのみ」と誤っていた。2026-09-16 修正）。
 // - タマゲタケ・モロバレルは 2026-10-05 実装（食材とくい）。
 // - ムウマ・ムウマージは 2026-10-26 実装（スキルとくい）。
+// - モンメン・エルフーンは 2026-11-16 実装（食材とくい、新食材ひとくちナッツを拾う）。
 // - ピカチュウのハロウィン衣装は年次で複数バリエーション（オレンジ／パープル）があるが、
 //   いずれも とくい＝きのみ のため 1エントリにまとめ、別表記を aliases に入れてある。
 // - 以下はソースにより記載が割れる／確認できなかったため収録していない:
@@ -222,6 +223,8 @@ export const SPECIES = [
   // --- イッシュ ---
   { id: 'munna', name: 'ムンナ', specialty: 'berry', aliases: [] },
   { id: 'mushana', name: 'ムシャーナ', specialty: 'berry', aliases: [] },
+  { id: 'monmen', name: 'モンメン', specialty: 'ingredient', aliases: [] },
+  { id: 'erufun', name: 'エルフーン', specialty: 'ingredient', aliases: [] },
   { id: 'ishizumai', name: 'イシズマイ', specialty: 'skill', aliases: [] },
   { id: 'iwaparesu', name: 'イワパレス', specialty: 'skill', aliases: [] },
   { id: 'tamagetake', name: 'タマゲタケ', specialty: 'ingredient', aliases: [] },

@@ -10,7 +10,7 @@
  * - すべてのURLは sw.js 自身からの相対パス（サブパス配信 = 相対パス解決に対応するため）。
  */
 
-const VERSION = 'v20261113-2304';
+const VERSION = 'v20261116-2210';
 const CACHE_PREFIX = 'psr-';
 const CACHE_NAME = CACHE_PREFIX + VERSION;
 

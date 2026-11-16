@@ -24,6 +24,7 @@ export const INGREDIENTS = [
   { id: 'coffee', name: 'めざましコーヒー', energy: 153, aliases: [] },
   { id: 'avocado', name: 'つやつやアボカド', energy: 162, aliases: [] },
   { id: 'pumpkin', name: 'ずっしりカボチャ', energy: 250, aliases: [] },
+  { id: 'nut', name: 'ひとくちナッツ', energy: 112, aliases: [] }, // 2026-11-16 追加
 ];
 
 export const SPECIES_INGREDIENTS = {
@@ -226,6 +227,9 @@ export const SPECIES_INGREDIENTS = {
   dakurai: { slot1: [{ ing: 'sausage', count: 2 }, { ing: 'apple', count: 2 }, { ing: 'herb', count: 2 }, { ing: 'milk', count: 2 }, { ing: 'honey', count: 2 }, { ing: 'soybean', count: 2 }, { ing: 'corn', count: 2 }, { ing: 'coffee', count: 2 }], slot2: [{ ing: 'sausage', count: 4 }, { ing: 'apple', count: 5 }, { ing: 'herb', count: 3 }, { ing: 'milk', count: 4 }, { ing: 'honey', count: 4 }, { ing: 'soybean', count: 4 }, { ing: 'corn', count: 3 }, { ing: 'coffee', count: 3 }], slot3: [{ ing: 'sausage', count: 6 }, { ing: 'apple', count: 7 }, { ing: 'herb', count: 5 }, { ing: 'milk', count: 6 }, { ing: 'honey', count: 6 }, { ing: 'soybean', count: 6 }, { ing: 'corn', count: 4 }, { ing: 'coffee', count: 4 }] },
   munna: { slot1: [{ ing: 'milk', count: 1 }], slot2: [{ ing: 'milk', count: 2 }, { ing: 'honey', count: 2 }], slot3: [{ ing: 'milk', count: 4 }, { ing: 'honey', count: 3 }, { ing: 'coffee', count: 2 }] },
   mushana: { slot1: [{ ing: 'milk', count: 1 }], slot2: [{ ing: 'milk', count: 2 }, { ing: 'honey', count: 2 }], slot3: [{ ing: 'milk', count: 4 }, { ing: 'honey', count: 3 }, { ing: 'coffee', count: 2 }] },
+  // モンメン／エルフーン（2026-11-16 実装、食材とくい）: ポケらく・Game8・Serebii の食材欄と個数の法則（ナッツ2 → 2.25倍/3.6倍）で一致
+  monmen: { slot1: [{ ing: 'nut', count: 2 }], slot2: [{ ing: 'nut', count: 5 }, { ing: 'avocado', count: 3 }], slot3: [{ ing: 'nut', count: 7 }, { ing: 'avocado', count: 5 }, { ing: 'tomato', count: 7 }] },
+  erufun: { slot1: [{ ing: 'nut', count: 2 }], slot2: [{ ing: 'nut', count: 5 }, { ing: 'avocado', count: 3 }], slot3: [{ ing: 'nut', count: 7 }, { ing: 'avocado', count: 5 }, { ing: 'tomato', count: 7 }] },
   ishizumai: { slot1: [{ ing: 'avocado', count: 1 }], slot2: [{ ing: 'avocado', count: 2 }, { ing: 'potato', count: 3 }], slot3: [{ ing: 'avocado', count: 4 }, { ing: 'potato', count: 5 }, { ing: 'oil', count: 5 }] },
   iwaparesu: { slot1: [{ ing: 'avocado', count: 1 }], slot2: [{ ing: 'avocado', count: 2 }, { ing: 'potato', count: 3 }], slot3: [{ ing: 'avocado', count: 4 }, { ing: 'potato', count: 5 }, { ing: 'oil', count: 5 }] },
   // タマゲタケ／モロバレル（2026-10-05 実装、食材とくい）: Wiki・Game8・Serebii の食材欄と個数の法則（キノコ2 → 2.25倍/3.6倍）で一致
